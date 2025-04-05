@@ -4,53 +4,75 @@ import './App.css'
 type Bulb = 1 | 0
 type BoardSize = 2 | 3 | 4 | 5
 
-function LightBoard({ board }: { board: Bulb[][] }) {
+function makeBitBoard(board: number[][]): number {
+  let bitstring = 0
+  let position = 0
+  for (let r = 0; r < board.length; r++) {
+    for (let c = 0; c < board[0].length; c++) {
+      if (board[r][c]) {
+        bitstring |= 1 << position
+      }
+      position++
+    }
+  }
+
+  return bitstring
+}
+
+function LightBoard({ board, size }: { board: number; size: BoardSize }) {
+  if (size < 2 || size > 5) {
+    throw new Error(`Unsupported board size (${size})`)
+  }
+
   const gridCols = {
     2: 'grid-cols-[repeat(2,2rem)]',
     3: 'grid-cols-[repeat(3,2rem)]',
     4: 'grid-cols-[repeat(4,2rem)]',
     5: 'grid-cols-[repeat(5,2rem)]',
-  }[board.length]
+  }[size]
+
+  const cells = Array.from({ length: size ** 2 }, (_, i) => {
+    const bit = board & (1 << i)
+    return (
+      <div
+        key={i}
+        className={`${
+          bit ? 'bg-emerald-500' : 'bg-stone-800'
+        } flex justify-center light-edge`}
+      ></div>
+    )
+  })
 
   return (
     <div
       className={`bg-zinc-700 grid ${gridCols} gap-2 w-fit p-2 light-edge auto-rows-[2rem]`}
     >
-      {board.map((row, ri) =>
-        row.map((bulb, ci) => (
-          <div
-            key={`${ri},${ci}`}
-            className={`${
-              bulb ? 'bg-emerald-500' : 'bg-stone-800'
-            } light-edge flex justify-center`}
-          >
-            {bulb}
-          </div>
-        ))
-      )}
+      {cells}
     </div>
   )
 }
 
 function App() {
-  const [boardSize, setBoardSize] = useState<BoardSize>(5)
+  const [originalBoard] = useState([
+    [0, 1, 0],
+    [0, 1, 1],
+    [0, 0, 1],
+  ])
+  const [bitBoard, setBitBoard] = useState(makeBitBoard(originalBoard))
+  const [boardSize, setBoardSize] = useState<BoardSize>(
+    originalBoard.length as BoardSize
+  )
 
   return (
     <div className="max-w-prose mx-auto mt-12 prose bg-zinc-800 text-slate-200 p-4 light-edge">
-      <h1 className="text-slate-300">LightsOut Solver</h1>
+      <h1 className="text-slate-300 font-bold">LightsOut Solver</h1>
 
       <p>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis adipisci
         neque veniam numquam asperiores dolor aut officia quam dolorum est.
       </p>
 
-      <LightBoard
-        board={[
-          [1, 0, 0],
-          [0, 1, 1],
-          [0, 0, 1],
-        ]}
-      />
+      <LightBoard board={bitBoard} size={boardSize} />
       <div className="card">
         {/* <button onClick={() => setCount((count) => count + 1)}>
           count is {count}

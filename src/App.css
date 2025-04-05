@@ -2,7 +2,7 @@
 @plugin "@tailwindcss/typography";
 
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -17,6 +17,6 @@
 }
 
 .light-edge {
-  box-shadow: inset 1px 0 0 #fff2,
-  inset 0 1px 0 #fff3;
+  box-shadow: inset 1px 0 0 #fff3,
+  inset 0 1px 0 #fff4;
 }
