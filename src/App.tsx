@@ -9,7 +9,17 @@ function toggleTile(
   size: BoardSize,
   row: number,
   col: number
-): BitBoard {}
+): BitBoard {
+  let update = board
+
+  update ^= 1 << (row * size + col)
+  if (row > 0) update ^= 1 << ((row - 1) * size + col)
+  if (row < size - 1) update ^= 1 << ((row + 1) * size + col)
+  if (col > 0) update ^= 1 << (row * size + col - 1)
+  if (col < size - 1) update ^= 1 << (row * size + col + 1)
+
+  return update
+}
 
 function makeBitBoard(board: number[][]): BitBoard {
   let bitstring = 0
@@ -83,12 +93,9 @@ function App() {
     originalBoard.length as BoardSize
   )
 
-  const [message, setMessage] = useState('Awaiting click...')
-
   return (
     <div className="max-w-prose mx-auto mt-12 prose bg-zinc-800 text-slate-200 p-4 light-edge">
       <h1 className="text-slate-300 font-bold">LightsOut Solver</h1>
-      <h2>{message}</h2>
 
       <p>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis adipisci
@@ -98,7 +105,7 @@ function App() {
       <LightBoard
         board={bitBoard}
         size={boardSize}
-        onFlip={(r, c) => setMessage(`${r},${c} flipped`)}
+        onFlip={(r, c) => setBitBoard(toggleTile(bitBoard, boardSize, r, c))}
       />
       <div className="card">
         {/* <button onClick={() => setCount((count) => count + 1)}>
