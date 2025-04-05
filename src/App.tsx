@@ -1,10 +1,17 @@
 import { useState } from 'react'
 import './App.css'
 
-type Bulb = 1 | 0
 type BoardSize = 2 | 3 | 4 | 5
+type BitBoard = number
 
-function makeBitBoard(board: number[][]): number {
+function toggleTile(
+  board: BitBoard,
+  size: BoardSize,
+  row: number,
+  col: number
+): BitBoard {}
+
+function makeBitBoard(board: number[][]): BitBoard {
   let bitstring = 0
   let position = 0
   for (let r = 0; r < board.length; r++) {
@@ -19,7 +26,15 @@ function makeBitBoard(board: number[][]): number {
   return bitstring
 }
 
-function LightBoard({ board, size }: { board: number; size: BoardSize }) {
+function LightBoard({
+  board,
+  size,
+  onFlip,
+}: {
+  board: number
+  size: BoardSize
+  onFlip: (row: number, col: number) => void
+}) {
   if (size < 2 || size > 5) {
     throw new Error(`Unsupported board size (${size})`)
   }
@@ -37,8 +52,11 @@ function LightBoard({ board, size }: { board: number; size: BoardSize }) {
       <div
         key={i}
         className={`${
-          bit ? 'bg-emerald-500' : 'bg-stone-800'
+          bit
+            ? 'bg-emerald-500 hover:bg-emerald-300 active:bg-lime-400'
+            : 'bg-stone-800 hover:bg-stone-700 active:bg-stone-400'
         } flex justify-center light-edge`}
+        onClick={() => onFlip(Math.floor(i / size), i % size)}
       ></div>
     )
   })
@@ -58,21 +76,30 @@ function App() {
     [0, 1, 1],
     [0, 0, 1],
   ])
-  const [bitBoard, setBitBoard] = useState(makeBitBoard(originalBoard))
+  const [bitBoard, setBitBoard] = useState<BitBoard>(
+    makeBitBoard(originalBoard)
+  )
   const [boardSize, setBoardSize] = useState<BoardSize>(
     originalBoard.length as BoardSize
   )
 
+  const [message, setMessage] = useState('Awaiting click...')
+
   return (
     <div className="max-w-prose mx-auto mt-12 prose bg-zinc-800 text-slate-200 p-4 light-edge">
       <h1 className="text-slate-300 font-bold">LightsOut Solver</h1>
+      <h2>{message}</h2>
 
       <p>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis adipisci
         neque veniam numquam asperiores dolor aut officia quam dolorum est.
       </p>
 
-      <LightBoard board={bitBoard} size={boardSize} />
+      <LightBoard
+        board={bitBoard}
+        size={boardSize}
+        onFlip={(r, c) => setMessage(`${r},${c} flipped`)}
+      />
       <div className="card">
         {/* <button onClick={() => setCount((count) => count + 1)}>
           count is {count}
