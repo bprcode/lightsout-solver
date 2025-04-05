@@ -20,3 +20,12 @@
   box-shadow: inset 1px 0 0 #fff3,
   inset 0 1px 0 #fff4;
 }
+.light-edge-shadow {
+  box-shadow: inset 1px 0 0 #fff3,
+  inset 0 1px 0 #fff4,
+  1px 2px 3px #0008;
+}
+.dark-edge {
+  box-shadow: inset 1px 0 0 #0008,
+  inset 0 1px 0 #000a;
+}

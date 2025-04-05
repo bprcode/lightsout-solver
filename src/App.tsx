@@ -1,10 +1,10 @@
-import { useState } from 'react'
+import { useState, useReducer } from 'react'
 import './App.css'
 
 type BoardSize = 2 | 3 | 4 | 5
 type BitBoard = number
 
-function toggleTile(
+function togglePlus(
   board: BitBoard,
   size: BoardSize,
   row: number,
@@ -17,6 +17,19 @@ function toggleTile(
   if (row < size - 1) update ^= 1 << ((row + 1) * size + col)
   if (col > 0) update ^= 1 << (row * size + col - 1)
   if (col < size - 1) update ^= 1 << (row * size + col + 1)
+
+  return update
+}
+
+function toggleSingle(
+  board: BitBoard,
+  size: BoardSize,
+  row: number,
+  col: number
+): BitBoard {
+  let update = board
+
+  update ^= 1 << (row * size + col)
 
   return update
 }
@@ -63,7 +76,7 @@ function LightBoard({
         key={i}
         className={`${
           bit
-            ? 'bg-emerald-500 hover:bg-emerald-300 active:bg-lime-400'
+            ? 'bg-emerald-500 hover:bg-emerald-300 active:bg-teal-300'
             : 'bg-stone-800 hover:bg-stone-700 active:bg-stone-400'
         } flex justify-center light-edge`}
         onClick={() => onFlip(Math.floor(i / size), i % size)}
@@ -93,19 +106,44 @@ function App() {
     originalBoard.length as BoardSize
   )
 
+  const [inputMode, setInputMode] = useState(() => togglePlus)
+
+  const activeStyle =
+    'bg-emerald-900 inset-shadow-sm inset-shadow-zinc-950 text-emerald-100/80'
+  const inactiveStyle =
+    'bg-emerald-700 light-edge-shadow hover:bg-emerald-600 active:bg-emerald-950'
+  const baseButtonStyle = 'px-3 py-1 mb-4 rounded-lg mr-4 font-semibold'
+
   return (
     <div className="max-w-prose mx-auto mt-12 prose bg-zinc-800 text-slate-200 p-4 light-edge">
-      <h1 className="text-slate-300 font-bold">LightsOut Solver</h1>
+      <h1 className="text-slate-300 font-bold">Lights Out Solver</h1>
 
       <p>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis adipisci
         neque veniam numquam asperiores dolor aut officia quam dolorum est.
       </p>
 
+      <button
+        className={`${
+          inputMode === togglePlus ? activeStyle : inactiveStyle
+        } ${baseButtonStyle}`}
+        onClick={() => setInputMode(() => togglePlus)}
+      >
+        Toggle linked tiles
+      </button>
+      <button
+        className={`${
+          inputMode === toggleSingle ? activeStyle : inactiveStyle
+        } ${baseButtonStyle}`}
+        onClick={() => setInputMode(() => toggleSingle)}
+      >
+        Toggle one at a time
+      </button>
+
       <LightBoard
         board={bitBoard}
         size={boardSize}
-        onFlip={(r, c) => setBitBoard(toggleTile(bitBoard, boardSize, r, c))}
+        onFlip={(r, c) => setBitBoard(inputMode(bitBoard, boardSize, r, c))}
       />
       <div className="card">
         {/* <button onClick={() => setCount((count) => count + 1)}>
