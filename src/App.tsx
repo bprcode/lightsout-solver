@@ -96,11 +96,17 @@ function LightBoard({
   size,
   onFlip = noop,
   className = '',
+  tagRow = NaN,
+  tagCol = NaN,
+  tag = '',
 }: {
   board: number
   size: BoardSize
   onFlip?: (row: number, col: number) => void
   className?: string
+  tagRow?: number
+  tagCol?: number
+  tag?: string
 }) {
   if (size < 2 || size > 5) {
     throw new Error(`Unsupported board size (${size})`)
@@ -113,6 +119,7 @@ function LightBoard({
     5: 'grid-cols-[repeat(5,2rem)]',
   }[size]
 
+  const tagIndex = tag ? tagCol + tagRow * size : NaN
   const cells = Array.from({ length: size ** 2 }, (_, i) => {
     const bit = board & (1 << i)
     return (
@@ -124,18 +131,35 @@ function LightBoard({
             : 'bg-stone-800 hover:bg-stone-700 active:bg-stone-400'
         } flex justify-center light-edge`}
         onClick={() => onFlip(Math.floor(i / size), i % size)}
-      ></div>
+      >
+        {i === tagIndex && (
+          <div
+            className={`outline-2 ${
+              bit ? 'outline-orange-500' : 'outline-orange-500'
+            } ${
+              bit ? 'bg-orange-900/90' : 'bg-orange-900/50'
+            } w-100 rounded-full flex justify-center`}
+          >
+            {tag}
+          </div>
+        )}
+      </div>
     )
   })
 
   return (
     <div
       className={
-        `bg-zinc-700 grid ${gridCols} gap-2 w-fit p-2 light-edge auto-rows-[2rem] ` +
+        `bg-zinc-700 grid ${gridCols} gap-2 w-fit p-2 light-edge auto-rows-[2rem] relative ` +
         className
       }
     >
       {cells}
+      {board === 0 && tag && (
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full px-3 py-1 bg-orange-950/80 outline-orange-500 outline-2">
+          {tag}
+        </div>
+      )}
     </div>
   )
 }
@@ -191,13 +215,27 @@ function SolutionSteps({
   return (
     <div>
       <h2 className="text-slate-200">Solution steps:</h2>
-      {solution.map((s, i) => (
-        <div key={i}>
-          {i < solution.length - 1 &&
-            stepDiff(solution[i], solution[i + 1], size)}
-          <LightBoard key={i} board={s} size={size} className="mb-4" />
-        </div>
-      ))}
+      <div className="flex flex-wrap gap-4">
+        {solution.map((s, i) => {
+          const diff =
+            i < solution.length - 1 &&
+            stepDiff(solution[i], solution[i + 1], size)
+
+          return (
+            <div key={i}>
+              <LightBoard
+                key={i}
+                board={s}
+                size={size}
+                className="mb-4"
+                tagRow={diff ? diff[0] : undefined}
+                tagCol={diff ? diff[1] : undefined}
+                tag={diff ? String(i + 1) : s === 0 ? 'Done!' : undefined}
+              />
+            </div>
+          )
+        })}
+      </div>
     </div>
   )
 }
