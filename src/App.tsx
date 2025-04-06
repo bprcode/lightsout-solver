@@ -79,6 +79,15 @@ function toggleSingle(
   return update
 }
 
+function makeRandomBoard(size:BoardSize) {
+  let board = 0
+  for (let i = 0; i < 7; i++) {
+    const position = Math.floor(Math.random()*(size**2))
+    board = togglePlus(board,size,Math.floor(position/size),position%size)
+  }
+  return board
+}
+
 function makeBitBoard(board: number[][]): BitBoard {
   let bitstring = 0
   let position = 0
@@ -245,16 +254,11 @@ function SolutionSteps({
   )
 }
 function App() {
-  const [originalBoard] = useState([
-    [0, 1, 0],
-    [0, 1, 1],
-    [0, 0, 1],
-  ])
   const [bitBoard, setBitBoard] = useState<BitBoard>(
-    makeBitBoard(originalBoard)
+    makeRandomBoard(5)
   )
   const [boardSize, setBoardSize] = useState<BoardSize>(
-    originalBoard.length as BoardSize
+    5
   )
 
   const [solution, setSolution] = useState<BitBoard[] | undefined | null>()
@@ -324,7 +328,7 @@ function App() {
             value={boardSize}
             onChange={e => {
               setBoardSize(Number(e.target.value) as BoardSize)
-              setBitBoard(0)
+              setBitBoard(makeRandomBoard(Number(e.target.value) as BoardSize))
               setSolution(undefined)
             }}
           >
