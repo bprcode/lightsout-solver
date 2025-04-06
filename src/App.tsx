@@ -4,17 +4,21 @@ import './App.css'
 type BoardSize = 2 | 3 | 4 | 5
 type BitBoard = number
 
-function solve(board: BitBoard, size: BoardSize): BitBoard[] {
+function solve(board: BitBoard, size: BoardSize): BitBoard[] | null {
   const seen = new Set<BitBoard>([board])
   const parent = new Map<BitBoard, BitBoard>([[board, -1]])
 
   let current: BitBoard[] = []
   let upcoming: BitBoard[] = [board]
 
-  console.log('original state:', board)
+  let depth = 0
+
+  console.log('original state:', board, 'with size:', size)
   while (upcoming.length) {
     current = upcoming
     upcoming = []
+
+    console.log('exploring depth', depth++)
 
     for (const u of current) {
       if (u === 0) {
@@ -41,7 +45,8 @@ function solve(board: BitBoard, size: BoardSize): BitBoard[] {
     }
   }
 
-  return [] as never
+  console.log('❌ Bailing out')
+  return null
 }
 
 function togglePlus(
@@ -214,7 +219,7 @@ function SolutionSteps({
 }) {
   return (
     <div>
-      <h2 className="text-slate-200">Solution steps:</h2>
+      <h2 className="text-slate-200 mt-4">Solution steps:</h2>
       <div className="flex flex-wrap gap-4">
         {solution.map((s, i) => {
           const diff =
@@ -252,7 +257,7 @@ function App() {
     originalBoard.length as BoardSize
   )
 
-  const [solution, setSolution] = useState<BitBoard[] | undefined>()
+  const [solution, setSolution] = useState<BitBoard[] | undefined | null>()
   console.log(solution)
 
   const [inputMode, setInputMode] = useState(() => togglePlus)
@@ -261,48 +266,79 @@ function App() {
     'bg-emerald-900 inset-shadow-sm inset-shadow-zinc-950 text-emerald-100/80 '
   const inactiveStyle =
     'bg-emerald-700 light-edge-shadow hover:bg-emerald-600 active:bg-emerald-950 '
-  const baseButtonStyle = 'px-3 py-1 mb-4 rounded-lg mr-4 font-semibold '
+  const baseButtonStyle = 'px-3 py-1 mb-4 rounded-lg font-semibold '
 
   return (
-    <div className="max-w-prose mx-auto mt-12 prose bg-zinc-800 text-slate-200 p-4 light-edge">
+    <div className="max-w-3xl mx-auto mt-8 prose bg-zinc-800 text-slate-200 p-4 light-edge">
       <h1 className="text-slate-300 font-bold">Lights Out Solver</h1>
 
       <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Omnis adipisci
-        neque veniam numquam asperiores dolor aut officia quam dolorum est.
+        <em>Lights Out</em> is a classic puzzle game in which the player tries
+        to switch off every light on the board. Whenever one light is changed,
+        its neighbors change in tandem.
+      </p>
+      <p>
+        This solver will find an optimal solution for any Lights Out puzzle, if
+        it exists (some boards have no solution). Just set up the board, then
+        click "solve" to see the solution.
       </p>
 
-      <button
-        className={`${
-          inputMode === togglePlus ? activeStyle : inactiveStyle
-        } ${baseButtonStyle}`}
-        onClick={() => setInputMode(() => togglePlus)}
-      >
-        Toggle linked tiles
-      </button>
-      <button
-        className={`${
-          inputMode === toggleSingle ? activeStyle : inactiveStyle
-        } ${baseButtonStyle}`}
-        onClick={() => setInputMode(() => toggleSingle)}
-      >
-        Toggle one at a time
-      </button>
+      <div className="flex gap-8 mt-8 w-fit">
+        <div className="flex flex-col">
+          <LightBoard
+            className="mb-4"
+            board={bitBoard}
+            size={boardSize}
+            onFlip={(r, c) => setBitBoard(inputMode(bitBoard, boardSize, r, c))}
+          />
 
-      <LightBoard
-        className="mb-4"
-        board={bitBoard}
-        size={boardSize}
-        onFlip={(r, c) => setBitBoard(inputMode(bitBoard, boardSize, r, c))}
-      />
+          <button
+            className={inactiveStyle + baseButtonStyle + 'w-full'}
+            onClick={() => {
+              const result = solve(bitBoard, boardSize)
+              setSolution(result)
+            }}
+          >
+            Solve
+          </button>
+        </div>
+        <div className="flex flex-col w-fit">
+          <button
+            className={`${
+              inputMode === togglePlus ? activeStyle : inactiveStyle
+            } ${baseButtonStyle}`}
+            onClick={() => setInputMode(() => togglePlus)}
+          >
+            Toggle linked tiles
+          </button>
+          <button
+            className={`${
+              inputMode === toggleSingle ? activeStyle : inactiveStyle
+            } ${baseButtonStyle}`}
+            onClick={() => setInputMode(() => toggleSingle)}
+          >
+            Toggle one at a time
+          </button>
+          <select
+            className="bg-zinc-700 px-4 py-2 light-edge mx-1"
+            value={boardSize}
+            onChange={e => {
+              setBoardSize(Number(e.target.value) as BoardSize)
+              setBitBoard(0)
+              setSolution(undefined)
+            }}
+          >
+            <option value="2">2x2</option>
+            <option value="3">3x3</option>
+            <option value="4">4x4</option>
+            <option value="5">5x5</option>
+          </select>
+        </div>
+      </div>
 
-      <button
-        className={inactiveStyle + baseButtonStyle}
-        onClick={() => setSolution(solve(bitBoard, boardSize))}
-      >
-        Solve
-      </button>
-
+      {solution === null && (
+        <h2 className="text-orange-300">This board cannot be solved.</h2>
+      )}
       {solution && <SolutionSteps solution={solution} size={boardSize} />}
     </div>
   )
