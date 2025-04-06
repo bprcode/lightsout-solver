@@ -1,8 +1,48 @@
-import { useState, useReducer } from 'react'
+import { useState } from 'react'
 import './App.css'
 
 type BoardSize = 2 | 3 | 4 | 5
 type BitBoard = number
+
+function solve(board: BitBoard, size: BoardSize): BitBoard[] {
+  const seen = new Set<BitBoard>([board])
+  const parent = new Map<BitBoard, BitBoard>([[board, -1]])
+
+  let current: BitBoard[] = []
+  let upcoming: BitBoard[] = [board]
+
+  console.log('original state:', board)
+  while (upcoming.length) {
+    current = upcoming
+    upcoming = []
+
+    for (const u of current) {
+      if (u === 0) {
+        console.log('⚠️ Solution found!')
+        // console.log(parent)
+        // window.parent=parent
+        const solution: BitBoard[] = []
+        for (let p = u; p !== -1; p = parent.get(p)!) {
+          solution.push(p)
+        }
+        return solution.reverse()
+      }
+
+      for (let r = 0; r < size; r++) {
+        for (let c = 0; c < size; c++) {
+          const move = togglePlus(u, size, r, c)
+          if (!seen.has(move)) {
+            seen.add(move)
+            parent.set(move, u)
+            upcoming.push(move)
+          }
+        }
+      }
+    }
+  }
+
+  return [] as never
+}
 
 function togglePlus(
   board: BitBoard,
@@ -49,14 +89,18 @@ function makeBitBoard(board: number[][]): BitBoard {
   return bitstring
 }
 
+const noop = () => {}
+
 function LightBoard({
   board,
   size,
-  onFlip,
+  onFlip = noop,
+  className = '',
 }: {
   board: number
   size: BoardSize
-  onFlip: (row: number, col: number) => void
+  onFlip?: (row: number, col: number) => void
+  className?: string
 }) {
   if (size < 2 || size > 5) {
     throw new Error(`Unsupported board size (${size})`)
@@ -86,13 +130,77 @@ function LightBoard({
 
   return (
     <div
-      className={`bg-zinc-700 grid ${gridCols} gap-2 w-fit p-2 light-edge auto-rows-[2rem]`}
+      className={
+        `bg-zinc-700 grid ${gridCols} gap-2 w-fit p-2 light-edge auto-rows-[2rem] ` +
+        className
+      }
     >
       {cells}
     </div>
   )
 }
 
+function stepDiff(
+  before: BitBoard,
+  after: BitBoard,
+  size: BoardSize
+): [number, number] {
+  const center: [number, number] = [NaN, NaN]
+  for (let row = 0; row < size && isNaN(center[0]); row++) {
+    let differences = 0
+    for (let col = 0; col < size; col++) {
+      if (
+        (before & (1 << (row * size + col))) !==
+        (after & (1 << (row * size + col)))
+      ) {
+        differences++
+        if (differences === 2) {
+          center[0] = row
+          break
+        }
+      }
+    }
+  }
+
+  for (let col = 0; col < size && isNaN(center[1]); col++) {
+    let differences = 0
+    for (let row = 0; row < size; row++) {
+      if (
+        (before & (1 << (row * size + col))) !==
+        (after & (1 << (row * size + col)))
+      ) {
+        differences++
+        if (differences === 2) {
+          center[1] = col
+          break
+        }
+      }
+    }
+  }
+
+  return center
+}
+
+function SolutionSteps({
+  solution,
+  size,
+}: {
+  solution: BitBoard[]
+  size: BoardSize
+}) {
+  return (
+    <div>
+      <h2 className="text-slate-200">Solution steps:</h2>
+      {solution.map((s, i) => (
+        <div key={i}>
+          {i < solution.length - 1 &&
+            stepDiff(solution[i], solution[i + 1], size)}
+          <LightBoard key={i} board={s} size={size} className="mb-4" />
+        </div>
+      ))}
+    </div>
+  )
+}
 function App() {
   const [originalBoard] = useState([
     [0, 1, 0],
@@ -106,13 +214,16 @@ function App() {
     originalBoard.length as BoardSize
   )
 
+  const [solution, setSolution] = useState<BitBoard[] | undefined>()
+  console.log(solution)
+
   const [inputMode, setInputMode] = useState(() => togglePlus)
 
   const activeStyle =
-    'bg-emerald-900 inset-shadow-sm inset-shadow-zinc-950 text-emerald-100/80'
+    'bg-emerald-900 inset-shadow-sm inset-shadow-zinc-950 text-emerald-100/80 '
   const inactiveStyle =
-    'bg-emerald-700 light-edge-shadow hover:bg-emerald-600 active:bg-emerald-950'
-  const baseButtonStyle = 'px-3 py-1 mb-4 rounded-lg mr-4 font-semibold'
+    'bg-emerald-700 light-edge-shadow hover:bg-emerald-600 active:bg-emerald-950 '
+  const baseButtonStyle = 'px-3 py-1 mb-4 rounded-lg mr-4 font-semibold '
 
   return (
     <div className="max-w-prose mx-auto mt-12 prose bg-zinc-800 text-slate-200 p-4 light-edge">
@@ -141,26 +252,20 @@ function App() {
       </button>
 
       <LightBoard
+        className="mb-4"
         board={bitBoard}
         size={boardSize}
         onFlip={(r, c) => setBitBoard(inputMode(bitBoard, boardSize, r, c))}
       />
-      <div className="card">
-        {/* <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button> */}
-        <p>
-          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Expedita
-          quod voluptas vitae hic. Consectetur laborum eveniet ipsam aliquam
-          labore harum voluptatum dolorum tempora? Tempora facere dolores fugit
-          magni porro alias hic possimus natus omnis a id ut non suscipit rem
-          obcaecati ratione aspernatur, vero incidunt dolore architecto beatae
-          doloribus. Tempora debitis mollitia labore quibusdam, obcaecati
-          consectetur inventore, assumenda facere exercitationem eveniet
-          temporibus dolore est officia error fugiat ab beatae cum porro. Iste
-          saepe vitae maxime inventore architecto officiis deleniti eaque!
-        </p>
-      </div>
+
+      <button
+        className={inactiveStyle + baseButtonStyle}
+        onClick={() => setSolution(solve(bitBoard, boardSize))}
+      >
+        Solve
+      </button>
+
+      {solution && <SolutionSteps solution={solution} size={boardSize} />}
     </div>
   )
 }
