@@ -1,55 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import './App.css'
+export type BoardSize = 2 | 3 | 4 | 5
+export type BitBoard = number
 
-type BoardSize = 2 | 3 | 4 | 5
-type BitBoard = number
-
-function solve(board: BitBoard, size: BoardSize): BitBoard[] | null {
-  const seen = new Set<BitBoard>([board])
-  const parent = new Map<BitBoard, BitBoard>([[board, -1]])
-
-  let current: BitBoard[] = []
-  let upcoming: BitBoard[] = [board]
-
-  let depth = 0
-
-  console.log('original state:', board, 'with size:', size)
-  while (upcoming.length) {
-    current = upcoming
-    upcoming = []
-
-    console.log('exploring depth', depth++)
-
-    for (const u of current) {
-      if (u === 0) {
-        console.log('⚠️ Solution found!')
-        // console.log(parent)
-        // window.parent=parent
-        const solution: BitBoard[] = []
-        for (let p = u; p !== -1; p = parent.get(p)!) {
-          solution.push(p)
-        }
-        return solution.reverse()
-      }
-
-      for (let r = 0; r < size; r++) {
-        for (let c = 0; c < size; c++) {
-          const move = togglePlus(u, size, r, c)
-          if (!seen.has(move)) {
-            seen.add(move)
-            parent.set(move, u)
-            upcoming.push(move)
-          }
-        }
-      }
-    }
-  }
-
-  console.log('❌ Bailing out')
-  return null
-}
-
-function togglePlus(
+export function togglePlus(
   board: BitBoard,
   size: BoardSize,
   row: number,
@@ -66,7 +20,7 @@ function togglePlus(
   return update
 }
 
-function toggleSingle(
+export function toggleSingle(
   board: BitBoard,
   size: BoardSize,
   row: number,
@@ -79,11 +33,16 @@ function toggleSingle(
   return update
 }
 
-function makeRandomBoard(size:BoardSize) {
+function makeRandomBoard(size: BoardSize) {
   let board = 0
   for (let i = 0; i < 7; i++) {
-    const position = Math.floor(Math.random()*(size**2))
-    board = togglePlus(board,size,Math.floor(position/size),position%size)
+    const position = Math.floor(Math.random() * size ** 2)
+    board = togglePlus(
+      board,
+      size,
+      Math.floor(position / size),
+      position % size
+    )
   }
   return board
 }
@@ -254,15 +213,24 @@ function SolutionSteps({
   )
 }
 function App() {
-  const [bitBoard, setBitBoard] = useState<BitBoard>(
-    makeRandomBoard(5)
-  )
-  const [boardSize, setBoardSize] = useState<BoardSize>(
-    5
-  )
-
+  const [workerThinking, setWorkerThinking] = useState(false)
   const [solution, setSolution] = useState<BitBoard[] | undefined | null>()
-  console.log(solution)
+  const [solveWorker, setSolveWorker] = useState<Worker | null>(null)
+  useEffect(() => {
+    const worker = new Worker(new URL('solve-worker.ts', import.meta.url))
+    worker.onmessage = e => {
+      console.log('Response returned to main thread:', e.data)
+      setSolution(e.data.solution)
+      setWorkerThinking(false)
+    }
+
+    setSolveWorker(worker)
+
+    return () => worker.terminate()
+  }, [])
+
+  const [bitBoard, setBitBoard] = useState<BitBoard>(makeRandomBoard(5))
+  const [boardSize, setBoardSize] = useState<BoardSize>(5)
 
   const [inputMode, setInputMode] = useState(() => togglePlus)
 
@@ -293,17 +261,51 @@ function App() {
             className="mb-4"
             board={bitBoard}
             size={boardSize}
-            onFlip={(r, c) => setBitBoard(inputMode(bitBoard, boardSize, r, c))}
+            onFlip={(r, c) => {
+              if (solution === null) {
+                setSolution(undefined)
+              }
+              setBitBoard(inputMode(bitBoard, boardSize, r, c))
+            }}
           />
 
           <button
-            className={inactiveStyle + baseButtonStyle + 'w-full'}
+            disabled={workerThinking}
+            className={
+              workerThinking
+                ? baseButtonStyle + `h-9  bg-stone-900 dark-edge ` + 'w-full'
+                : inactiveStyle + baseButtonStyle + 'w-full'
+            }
             onClick={() => {
-              const result = solve(bitBoard, boardSize)
-              setSolution(result)
+              setWorkerThinking(true)
+              setSolution(undefined)
+              solveWorker?.postMessage({ bitBoard, boardSize })
             }}
           >
-            Solve
+            {workerThinking ? (
+              <svg
+                className="animate-spin mx-auto size-5 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+            ) : (
+              'Solve'
+            )}
           </button>
         </div>
         <div className="flex flex-col w-fit">
@@ -311,7 +313,9 @@ function App() {
             className={`${
               inputMode === togglePlus ? activeStyle : inactiveStyle
             } ${baseButtonStyle}`}
-            onClick={() => setInputMode(() => togglePlus)}
+            onClick={() => {
+              setInputMode(() => togglePlus)
+            }}
           >
             Toggle linked tiles
           </button>
