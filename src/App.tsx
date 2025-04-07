@@ -208,7 +208,6 @@ function App() {
     worker.onmessage = e => {
       setWorkerThinking(false)
 
-
       if (e.data.error) {
         // Board was unsolvable.
         setSolution(null)
@@ -244,26 +243,29 @@ function App() {
 
   const [inputMode, setInputMode] = useState(() => togglePlus)
 
-  const activeStyle =
+  const pressedStyle =
     'bg-emerald-900 inset-shadow-sm inset-shadow-zinc-950 text-emerald-100/80 '
-  const inactiveStyle =
-    'bg-emerald-700 light-edge-shadow hover:bg-emerald-600 active:bg-emerald-950 '
-  const baseButtonStyle = 'px-3 py-1 mb-4 rounded-lg font-semibold '
+  const unpressedStyle =
+    'bg-emerald-700 light-edge-shadow hover:bg-emerald-600 active:bg-emerald-800 active:text-emerald-100 active:inset-shadow-sm active:inset-shadow-zinc-950 '
+  const baseButtonStyle =
+    'px-3 py-1 mb-4 rounded-lg font-semibold h-10 relative '
 
   return (
-    <div className="max-w-3xl mx-auto mt-8 prose bg-zinc-800 text-slate-200 p-4 light-edge">
-      <h1 className="text-slate-300 font-bold">Lights Out Solver</h1>
+    <div className="max-w-3xl mx-auto mt-8  bg-zinc-800 text-slate-200 p-4 light-edge">
+      <div className="prose text-slate-200">
+        <h1 className="text-slate-300 font-bold">Lights Out Solver</h1>
 
-      <p>
-        <em>Lights Out</em> is a classic puzzle game in which the player tries
-        to switch off every light on the board. Whenever one light is changed,
-        its neighbors change in tandem.
-      </p>
-      <p>
-        This solver will find an optimal solution for any Lights Out puzzle, if
-        it exists (some boards have no solution). Just set up the board, then
-        click "solve" to see the solution.
-      </p>
+        <p>
+          <em>Lights Out</em> is a classic puzzle game in which the player tries
+          to switch off every light on the board. Whenever one light is changed,
+          its neighbors change in tandem.
+        </p>
+        <p>
+          This solver will find an optimal solution for any Lights Out puzzle,
+          if it exists (some boards have no solution). Just set up the board,
+          then click "solve" to see the solution.
+        </p>
+      </div>
 
       <div className="flex gap-8 mt-8 w-fit">
         <div className="flex flex-col">
@@ -283,8 +285,8 @@ function App() {
             disabled={workerThinking}
             className={
               workerThinking
-                ? baseButtonStyle + `h-9  bg-stone-900 dark-edge ` + 'w-full'
-                : inactiveStyle + baseButtonStyle + 'w-full'
+                ? baseButtonStyle + pressedStyle
+                : unpressedStyle + baseButtonStyle + 'w-full'
             }
             onClick={() => {
               setWorkerThinking(true)
@@ -292,36 +294,13 @@ function App() {
               solveWorker?.postMessage({ bitBoard, boardSize })
             }}
           >
-            {workerThinking ? (
-              <svg
-                className="animate-spin mx-auto size-5 text-white"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                ></path>
-              </svg>
-            ) : (
-              'Solve'
-            )}
+              Solve
           </button>
         </div>
         <div className="flex flex-col w-fit">
           <button
             className={`${
-              inputMode === togglePlus ? activeStyle : inactiveStyle
+              inputMode === togglePlus ? pressedStyle : unpressedStyle
             } ${baseButtonStyle}`}
             onClick={() => {
               setInputMode(() => togglePlus)
@@ -331,7 +310,7 @@ function App() {
           </button>
           <button
             className={`${
-              inputMode === toggleSingle ? activeStyle : inactiveStyle
+              inputMode === toggleSingle ? pressedStyle : unpressedStyle
             } ${baseButtonStyle}`}
             onClick={() => setInputMode(() => toggleSingle)}
           >

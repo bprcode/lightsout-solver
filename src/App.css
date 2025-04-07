@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 @plugin "@tailwindcss/typography";
 
 :root {
@@ -16,16 +16,18 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.light-edge {
-  box-shadow: inset 1px 0 0 #fff3,
-  inset 0 1px 0 #fff4;
+@utility d {
+  outline: 3px solid orange;
 }
-.light-edge-shadow {
-  box-shadow: inset 1px 0 0 #fff3,
-  inset 0 1px 0 #fff4,
-  1px 2px 3px #0008;
+
+@utility light-edge {
+  box-shadow: inset 1px 0 0 #fff3, inset 0 1px 0 #fff4;
 }
-.dark-edge {
-  box-shadow: inset 1px 0 0 #0008,
-  inset 0 1px 0 #000a;
+
+@utility light-edge-shadow {
+  box-shadow: inset 1px 0 0 #fff3, inset 0 1px 0 #fff4, 1px 2px 3px #0008;
+}
+
+@utility dark-edge {
+  box-shadow: inset 1px 0 0 #0008, inset 0 1px 0 #000a;
 }
