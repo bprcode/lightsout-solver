@@ -89,7 +89,8 @@ function LightBoard({
           key={i}
           className={`${
             bit
-              ? 'bg-emerald-500 group-hover:bg-emerald-300 group-active:bg-teal-200 extra-light-edge'
+              // ? 'bg-emerald-500 group-hover:bg-emerald-300 group-active:bg-teal-200 extra-light-edge'
+              ? 'illuminated group-hover:very-illuminated group-active:bg-teal-200'
               : 'bg-stone-800 group-hover:bg-stone-700 group-active:bg-stone-400 light-edge'
           } flex justify-center w-full h-full`}
         >

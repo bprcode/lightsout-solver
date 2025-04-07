@@ -20,6 +20,23 @@
   outline: 1px solid orange;
 }
 
+@utility illuminated {
+  @apply bg-emerald-500;
+  box-shadow: inset 1px 0 0 rgb(16, 255, 187), inset 0 1px 0 rgb(36, 255, 193);
+  
+  /* background-image: radial-gradient(2.25rem at 65% 70%, oklch(69.6% 0.17 162.48), oklch(26.2% 0.051 172.552));
+  box-shadow: 
+  inset 3px 3px 0.125rem -2px oklch(0.82 0.1973 159.03),
+  inset -3px -3px 0.25rem -2px oklch(0.82 0.1973 159.03)
+  ; */
+}
+
+@utility very-illuminated {
+  @apply bg-emerald-300;
+  /* background-image: radial-gradient(2.25rem at 70% 80%, oklch(79.6% 0.17 162.48), oklch(46.2% 0.051 172.552));
+  box-shadow: inset 1.5px 3px 0.25rem -2px oklch(0.92 0.1973 159.03); */
+}
+
 @utility light-edge {
   box-shadow: inset 1px 0 0 #fff3, inset 0 1px 0 #fff4;
 }
