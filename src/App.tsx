@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import linkedSelectionSvg from './assets/linked-selection.svg'
+import unlinkedSelectionSvg from './assets/unlinked-selection.svg'
 export type BoardSize = 2 | 3 | 4 | 5
 export type BitBoard = number
 
@@ -179,8 +181,8 @@ function SolutionSteps({
 }) {
   return (
     <div className={className}>
-      <h2 className="text-slate-200 mt-4">Solution steps:</h2>
-      <div className="flex flex-wrap gap-4">
+      <h3 className="text-slate-200 mt-4 text-xl">Solution steps:</h3>
+      <div className="flex flex-wrap gap-4 mt-4">
         {solution.map((s, i) => {
           const diff =
             i < solution.length - 1 &&
@@ -192,7 +194,7 @@ function SolutionSteps({
                 key={i}
                 board={s}
                 size={size}
-                className="mb-4"
+                className="mb-4 snap-center"
                 tagRow={diff ? diff[0] : undefined}
                 tagCol={diff ? diff[1] : undefined}
                 tag={diff ? String(i + 1) : s === 0 ? 'Done!' : undefined}
@@ -254,11 +256,15 @@ function App() {
     'bg-emerald-900 inset-shadow-sm inset-shadow-zinc-950 text-emerald-100/80 '
   const unpressedStyle =
     'bg-emerald-700 light-edge-shadow hover:bg-emerald-600 active:bg-emerald-800 active:text-emerald-100 active:inset-shadow-sm active:inset-shadow-zinc-950 '
+  const grayPressedStyle =
+    'bg-zinc-900 inset-shadow-sm inset-shadow-zinc-950 text-zinc-100/80 '
+  const grayUnpressedStyle =
+    'bg-zinc-700 light-edge-shadow hover:bg-emerald-600 active:bg-zinc-800 active:text-zinc-100 active:inset-shadow-sm active:inset-shadow-zinc-950 '
   const baseButtonStyle =
-    'px-3 py-1 mb-4 rounded-lg font-semibold h-10 relative '
+    'px-3 py-1 mb-4 rounded-lg font-semibold h-10 relative flex justify-center items-center '
 
   return (
-    <div className="max-w-3xl mx-auto mt-8  bg-zinc-800 text-slate-200 p-4 light-edge flex flex-col">
+    <div className="max-w-4xl mx-auto mt-8  bg-zinc-800 text-slate-200 p-4 light-edge flex flex-col">
       <div className="prose text-slate-200">
         <h1 className="text-slate-300 font-bold">Lights Out Solver</h1>
 
@@ -274,9 +280,47 @@ function App() {
         </p>
       </div>
 
-      <div className="outline-4 outline-rose-500/10 mt-8 flex gap-8">
-        <div className="flex gap-8 w-fit bg-blue-400/10">
-          <div className="flex flex-col">
+      <div className="mt-8 flex gap-8">
+        <div className="flex gap-8 w-fit">
+          <div className="flex flex-col items-center">
+          
+          <div className="flex w-fit gap-4 items-start">
+            <button
+              className={`${
+                inputMode === togglePlus ? pressedStyle : unpressedStyle
+              } ${baseButtonStyle}`}
+              onClick={() => {
+                setInputMode(() => togglePlus)
+              }}
+            >
+              <img src={linkedSelectionSvg} />&nbsp;linked
+            </button>
+            <button
+              className={`${
+                inputMode === toggleSingle ? pressedStyle : unpressedStyle
+              } ${baseButtonStyle}`}
+              onClick={() => setInputMode(() => toggleSingle)}
+            >
+              <img src={unlinkedSelectionSvg} />&nbsp;single
+            </button>
+            <select
+              className="bg-zinc-700 px-4 py-2 light-edge mx-1 h-fit"
+              value={boardSize}
+              onChange={e => {
+                setBoardSize(Number(e.target.value) as BoardSize)
+                setBitBoard(
+                  makeRandomBoard(Number(e.target.value) as BoardSize)
+                )
+                setSolution(undefined)
+              }}
+            >
+              <option value="2">2x2</option>
+              <option value="3">3x3</option>
+              <option value="4">4x4</option>
+              <option value="5">5x5</option>
+            </select>
+          </div>
+
             <LightBoard
               className="mb-4"
               board={bitBoard}
@@ -305,47 +349,12 @@ function App() {
               Solve
             </button>
           </div>
-          <div className="flex flex-col w-fit">
-            <button
-              className={`${
-                inputMode === togglePlus ? pressedStyle : unpressedStyle
-              } ${baseButtonStyle}`}
-              onClick={() => {
-                setInputMode(() => togglePlus)
-              }}
-            >
-              Toggle linked tiles
-            </button>
-            <button
-              className={`${
-                inputMode === toggleSingle ? pressedStyle : unpressedStyle
-              } ${baseButtonStyle}`}
-              onClick={() => setInputMode(() => toggleSingle)}
-            >
-              Toggle one at a time
-            </button>
-            <select
-              className="bg-zinc-700 px-4 py-2 light-edge mx-1"
-              value={boardSize}
-              onChange={e => {
-                setBoardSize(Number(e.target.value) as BoardSize)
-                setBitBoard(
-                  makeRandomBoard(Number(e.target.value) as BoardSize)
-                )
-                setSolution(undefined)
-              }}
-            >
-              <option value="2">2x2</option>
-              <option value="3">3x3</option>
-              <option value="4">4x4</option>
-              <option value="5">5x5</option>
-            </select>
-          </div>
+          
         </div>
 
-        <div className="bg-red-300/20 grow overflow-y-auto relative">
+        <div className="grow overflow-y-auto relative snap-y snap-mandatory">
           {solution === null && (
-            <h2 className="text-orange-300">This board cannot be solved.</h2>
+            <h2 className="text-orange-300 text-2xl">This board cannot be solved.</h2>
           )}
           {solution && (
             <SolutionSteps
