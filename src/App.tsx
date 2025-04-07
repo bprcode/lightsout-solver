@@ -208,10 +208,10 @@ function App() {
     worker.onmessage = e => {
       setWorkerThinking(false)
 
-      console.log('solution returned:', e.data.solution)
 
       if (e.data.error) {
-        console.log('Handle: board was unsolvable.')
+        // Board was unsolvable.
+        setSolution(null)
         return
       }
 

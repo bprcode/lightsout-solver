@@ -1,20 +1,16 @@
 type F2 = 0 | 1
 
 onmessage = e => {
-  console.log('F2 solve worker received data:', e.data)
-
-  console.log('board was:', e.data.bitBoard)
-  console.log('size was:', e.data.boardSize)
+  
 
   const boardVector: F2[] = Array(e.data.boardSize ** 2)
   for (let i = 0; i < e.data.boardSize ** 2; i++) {
     boardVector[i] = e.data.bitBoard & (1 << i) ? 1 : 0
   }
 
-  console.log('vector:', boardVector)
+  
   try {
     const solution = solveBoardVector(boardVector)
-    console.log('solution found:', solution)
     postMessage({ solution, originalBitBoard: e.data.bitBoard })
   } catch (error) {
     if (error instanceof Error) {
