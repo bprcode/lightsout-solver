@@ -47,21 +47,6 @@ function makeRandomBoard(size: BoardSize) {
   return board
 }
 
-// function makeBitBoard(board: number[][]): BitBoard {
-//   let bitstring = 0
-//   let position = 0
-//   for (let r = 0; r < board.length; r++) {
-//     for (let c = 0; c < board[0].length; c++) {
-//       if (board[r][c]) {
-//         bitstring |= 1 << position
-//       }
-//       position++
-//     }
-//   }
-
-//   return bitstring
-// }
-
 const noop = () => {}
 
 function LightBoard({
@@ -212,16 +197,41 @@ function SolutionSteps({
     </div>
   )
 }
+
 function App() {
   const [workerThinking, setWorkerThinking] = useState(false)
   const [solution, setSolution] = useState<BitBoard[] | undefined | null>()
   const [solveWorker, setSolveWorker] = useState<Worker | null>(null)
+
   useEffect(() => {
-    const worker = new Worker(new URL('solve-worker.ts', import.meta.url))
+    const worker = new Worker(new URL('solve-worker-f2.ts', import.meta.url))
     worker.onmessage = e => {
-      console.log('Response returned to main thread:', e.data)
-      setSolution(e.data.solution)
       setWorkerThinking(false)
+
+      console.log('solution returned:', e.data.solution)
+
+      if (e.data.error) {
+        console.log('Handle: board was unsolvable.')
+        return
+      }
+
+      const newSolution: BitBoard[] = [e.data.originalBitBoard]
+      const size = Math.sqrt(e.data.solution.length) as BoardSize
+
+      for (let i = 0; i < e.data.solution.length; i++) {
+        if (e.data.solution[i]) {
+          newSolution.push(
+            togglePlus(
+              newSolution[newSolution.length - 1],
+              size,
+              Math.floor(i / size),
+              i % size
+            )
+          )
+        }
+      }
+
+      setSolution(newSolution)
     }
 
     setSolveWorker(worker)
@@ -295,7 +305,7 @@ function App() {
                   cy="12"
                   r="10"
                   stroke="currentColor"
-                  stroke-width="4"
+                  strokeWidth="4"
                 ></circle>
                 <path
                   className="opacity-75"
@@ -353,155 +363,3 @@ function App() {
 }
 
 export default App
-
-type F2 = 0 | 1
-const testMatrix:F2[][] = [
-[1,1,0,1,0,0,0,0,0],
-[1,1,1,0,1,0,0,0,0],
-[0,1,1,0,0,1,0,0,0],
-[1,0,0,1,1,0,1,0,0],
-[0,1,0,1,1,1,0,1,0],
-[0,0,1,0,1,1,0,0,1],
-[0,0,0,1,0,0,1,1,0],
-[0,0,0,0,1,0,1,1,1],
-[0,0,0,0,0,1,0,1,1],
-]
-
-function augmentTest(augment:F2[]):F2[][] {
-  const augmented = structuredClone(testMatrix)
-   for (let k = 0; k < augment.length; k++) {
-    augmented[k].push(augment[k])
-  }
-
-  return augmented
-}
-
-const f2Matrix :F2[][]= [
-  [0,0,1,0,0],
-  [1,0,1,0,1],
-  [1,0,1,1,0],
-  [0,0,0,1,1],
-]
-
-function getLogicMatrix(dimension:number):F2[][] {
-  const n2 = dimension ** 2
-  const blankRow = Array(n2).fill(0)
-  const matrix :F2[][]= Array.from({length:n2}, () => blankRow.slice(0))
-
-
-  for (let i = 0; i < dimension; i++) {
-    for (let j = 0; j < dimension; j++) {
-      // i*dimension + j
-      matrix[i*dimension+j][i*dimension+j] = 1
-
-      if(i> 0)          matrix[i*dimension+j][(i-1)*dimension+j] = 1
-      if(i<dimension-1) matrix[i*dimension+j][(i+1)*dimension+j] = 1
-      if(j>0)           matrix[i*dimension+j][i*dimension+j-1] = 1
-      if(j<dimension-1) matrix[i*dimension+j][i*dimension+j+1] = 1
-
-    }
-    
-  }
-
-  return matrix
-}
-
-function rrefOverF2(matrix: F2[][]) {
-  console.log('Initial matrix:')
-  show()
-  
-  arrangePivots()
-  console.log('After placing pivots:')
-  show()
-  
-  console.log('matrix is consistent?', checkConsistency())
-
-  for (let i = 0; i < matrix.length; i++) {
-    for(let j = 0; j < matrix[0].length; j++) {
-      if(matrix[i][j] !== 0) {
-        clearAbove(i,j)
-        break
-      }
-    }
-  }
-
-  console.log('After clear above:')
-  show()
-
-  function show() {
-    for(const row of matrix) {
-      console.log(row)
-    }
-  }
-
-  function checkConsistency() {
-    for(let i = matrix.length-1; i>=0; i--) {
-      for(let j = 0; j < matrix[0].length; j++) {
-        if(matrix[i][j] !== 0) {
-          if(j === matrix[0].length-1) {
-            return false
-          }
-          break
-        }
-      }
-    }
-
-    return true
-  }
-
-  function addRowFromTo(sourceRow:number,targetRow:number) {
-    for (let j = 0; j < matrix[0].length; j++) {
-      matrix[targetRow][j] = (matrix[sourceRow][j]+matrix[targetRow][j])%2 as F2
-    }
-  }
-
-  function clearBelow(i:number,j:number) {
-    for (let iPrime = i+1; iPrime < matrix.length; iPrime++) {
-      if(matrix[iPrime][j] !== 0) {
-        console.log(i,'->',iPrime)
-        addRowFromTo(i,iPrime)
-      }
-    }
-  }
-
-  function clearAbove(i:number,j:number) {
-    for(let iPrime = i-1; iPrime >= 0; iPrime--) {
-      if(matrix[iPrime][j] !== 0) {
-        console.log(i,'->>',iPrime)
-        addRowFromTo(i,iPrime)
-      }
-    }
-  }
-
-  function arrangePivots(iFrom=0,jFrom=0) {
-    console.log(iFrom,jFrom,'...')
-    for (let j = jFrom; j < matrix[0].length; j++) {
-      for(let i = iFrom; i < matrix.length; i++) {
-        if(matrix[i][j] !== 0) {
-          // console.log('swapping',i,iFrom)
-          console.log(i,'<>',iFrom)
-          const swap = matrix[iFrom]
-          matrix[iFrom] = matrix[i]
-          matrix[i] = swap
-          // console.log('~')
-          // show()
-          clearBelow(iFrom,j)
-          // return
-          show()
-          arrangePivots(iFrom+1,j+1)
-          return
-        }
-      }
-      
-    }
-  }
-}
-
-console.log('Check')
-rrefOverF2(augmentTest([0,1,1,1,1,1,1,1,0]))
-
-console.log('logic check:')
-const m = getLogicMatrix(3)
-for(const row of m) {
-  console.log(row.map(x => x ? '🟨' : '⬛').join(' '))
-}
