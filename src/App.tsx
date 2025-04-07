@@ -381,7 +381,31 @@ const f2Matrix :F2[][]= [
   [1,0,1,0,1],
   [1,0,1,1,0],
   [0,0,0,1,1],
-] 
+]
+
+function getLogicMatrix(dimension:number):F2[][] {
+  const n2 = dimension ** 2
+  const blankRow = Array(n2).fill(0)
+  const matrix :F2[][]= Array.from({length:n2}, () => blankRow.slice(0))
+
+
+  for (let i = 0; i < dimension; i++) {
+    for (let j = 0; j < dimension; j++) {
+      // i*dimension + j
+      matrix[i*dimension+j][i*dimension+j] = 1
+
+      if(i> 0)          matrix[i*dimension+j][(i-1)*dimension+j] = 1
+      if(i<dimension-1) matrix[i*dimension+j][(i+1)*dimension+j] = 1
+      if(j>0)           matrix[i*dimension+j][i*dimension+j-1] = 1
+      if(j<dimension-1) matrix[i*dimension+j][i*dimension+j+1] = 1
+
+    }
+    
+  }
+
+  return matrix
+}
+
 function rrefOverF2(matrix: F2[][]) {
   console.log('Initial matrix:')
   show()
@@ -474,4 +498,10 @@ function rrefOverF2(matrix: F2[][]) {
 }
 
 console.log('Check')
-rrefOverF2(augmentTest([1,1,0,1,0,1,0,0,1]))
+rrefOverF2(augmentTest([0,1,1,1,1,1,1,1,0]))
+
+console.log('logic check:')
+const m = getLogicMatrix(3)
+for(const row of m) {
+  console.log(row.map(x => x ? '🟨' : '⬛').join(' '))
+}
