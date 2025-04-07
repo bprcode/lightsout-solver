@@ -71,10 +71,10 @@ function LightBoard({
   }
 
   const gridCols = {
-    2: 'grid-cols-[repeat(2,2rem)]',
-    3: 'grid-cols-[repeat(3,2rem)]',
-    4: 'grid-cols-[repeat(4,2rem)]',
-    5: 'grid-cols-[repeat(5,2rem)]',
+    2: 'grid-cols-[repeat(2,2.5rem)]',
+    3: 'grid-cols-[repeat(3,2.5rem)]',
+    4: 'grid-cols-[repeat(4,2.5rem)]',
+    5: 'grid-cols-[repeat(5,2.5rem)]',
   }[size]
 
   const tagIndex = tag ? tagCol + tagRow * size : NaN
@@ -82,25 +82,29 @@ function LightBoard({
     const bit = board & (1 << i)
     return (
       <div
-        key={i}
-        className={`${
-          bit
-            ? 'bg-emerald-500 hover:bg-emerald-300 active:bg-teal-300'
-            : 'bg-stone-800 hover:bg-stone-700 active:bg-stone-400'
-        } flex justify-center light-edge`}
+        className="p-1 group"
         onClick={() => onFlip(Math.floor(i / size), i % size)}
       >
-        {i === tagIndex && (
-          <div
-            className={`outline-2 ${
-              bit ? 'outline-orange-500' : 'outline-orange-500'
-            } ${
-              bit ? 'bg-orange-900/90' : 'bg-orange-900/50'
-            } w-100 rounded-full flex justify-center`}
-          >
-            {tag}
-          </div>
-        )}
+        <div
+          key={i}
+          className={`${
+            bit
+              ? 'bg-emerald-500 group-hover:bg-emerald-300 group-active:bg-teal-200 extra-light-edge'
+              : 'bg-stone-800 group-hover:bg-stone-700 group-active:bg-stone-400 light-edge'
+          } flex justify-center w-full h-full`}
+        >
+          {i === tagIndex && (
+            <div
+              className={`outline-2 ${
+                bit ? 'outline-orange-500' : 'outline-orange-500'
+              } ${
+                bit ? 'bg-orange-900/90' : 'bg-orange-900/50'
+              } w-100 rounded-full flex justify-center`}
+            >
+              {tag}
+            </div>
+          )}
+        </div>
       </div>
     )
   })
@@ -108,7 +112,7 @@ function LightBoard({
   return (
     <div
       className={
-        `bg-zinc-700 grid ${gridCols} gap-2 w-fit p-2 light-edge auto-rows-[2rem] relative ` +
+        `bg-zinc-700 grid ${gridCols} w-fit p-1 light-edge auto-rows-[2.5rem] relative ` +
         className
       }
     >
@@ -294,7 +298,7 @@ function App() {
               solveWorker?.postMessage({ bitBoard, boardSize })
             }}
           >
-              Solve
+            Solve
           </button>
         </div>
         <div className="flex flex-col w-fit">

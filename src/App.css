@@ -17,11 +17,15 @@
 }
 
 @utility d {
-  outline: 3px solid orange;
+  outline: 1px solid orange;
 }
 
 @utility light-edge {
   box-shadow: inset 1px 0 0 #fff3, inset 0 1px 0 #fff4;
+}
+
+@utility extra-light-edge {
+  box-shadow: inset 1px 0 0 #fff6, inset 0 1px 0 #fff7;
 }
 
 @utility light-edge-shadow {
