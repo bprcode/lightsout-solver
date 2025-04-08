@@ -257,17 +257,22 @@ function App() {
   const unpressedStyle =
     'bg-emerald-700 light-edge-shadow hover:bg-emerald-600 active:bg-emerald-800 active:text-emerald-100 active:inset-shadow-sm active:inset-shadow-zinc-950 '
   const grayPressedStyle =
-    'bg-zinc-900 inset-shadow-sm inset-shadow-zinc-950 text-zinc-100/80 '
+    'bg-zinc-800 inset-shadow-sm inset-shadow-zinc-950 text-zinc-100/80 '
   const grayUnpressedStyle =
-    'bg-zinc-700 light-edge-shadow hover:bg-emerald-600 active:bg-zinc-800 active:text-zinc-100 active:inset-shadow-sm active:inset-shadow-zinc-950 '
+    'bg-zinc-700 light-edge-shadow hover:bg-zinc-600 active:bg-zinc-800 active:text-zinc-100 active:inset-shadow-sm active:inset-shadow-zinc-950 '
   const baseButtonStyle =
-    'px-3 py-1 mb-4 rounded-lg font-semibold h-10 relative flex justify-center items-center '
+    'px-3 py-1 mb-4 rounded-lg font-semibold h-10 relative flex justify-center items-center shrink-0 '
 
   return (
-    <div className="max-w-4xl mx-auto mt-8  bg-zinc-800 text-slate-200 p-4 light-edge flex flex-col">
-      <div className="prose text-slate-200">
-        <h1 className="text-slate-300 font-bold">Lights Out Solver</h1>
+    <div className="max-w-4xl mx-auto mt-8  bg-zinc-800 text-slate-200 p-4 light-edge">
+      
+      <div className="flex flex-col">
+        
 
+
+      <div className="flex gap-0">
+      <div className="prose text-slate-200">
+        <h1 className="text-slate-300 font-bold mb-8 text-3xl"><em>Lights Out</em> Solver</h1>
         <p>
           <em>Lights Out</em> is a classic puzzle game in which the player tries
           to switch off every light on the board. Whenever one light is changed,
@@ -279,33 +284,30 @@ function App() {
           then click "solve" to see the solution.
         </p>
       </div>
-
-      <div className="mt-8 flex gap-8">
-        <div className="flex gap-8 w-fit">
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center shrink-0">
           
           <div className="flex w-fit gap-4 items-start">
             
             <button
               className={`${
-                inputMode === togglePlus ? pressedStyle : unpressedStyle
+                inputMode === togglePlus ? grayPressedStyle : grayUnpressedStyle
               } ${baseButtonStyle}`}
               onClick={() => {
                 setInputMode(() => togglePlus)
               }}
             >
-              <img src={linkedSelectionSvg} />&nbsp;linked
+              <img src={linkedSelectionSvg} className="inline-block"/>&nbsp;linked
             </button>
             <button
               className={`${
-                inputMode === toggleSingle ? pressedStyle : unpressedStyle
+                inputMode === toggleSingle ? grayPressedStyle : grayUnpressedStyle
               } ${baseButtonStyle}`}
               onClick={() => setInputMode(() => toggleSingle)}
             >
-              <img src={unlinkedSelectionSvg} />&nbsp;single
+              <img src={unlinkedSelectionSvg} className="block" />&nbsp;single
             </button>
             <select
-              className="bg-zinc-700 px-4 py-2 light-edge mx-1 h-fit"
+              className="bg-zinc-700 px-4 py-2 light-edge h-fit"
               value={boardSize}
               onChange={e => {
                 setBoardSize(Number(e.target.value) as BoardSize)
@@ -322,6 +324,7 @@ function App() {
             </select>
           </div>
 
+            <div>
             <LightBoard
               className="mb-4"
               board={bitBoard}
@@ -334,12 +337,11 @@ function App() {
               }}
             />
 
+            <div className="flex gap-4">
             <button
               disabled={workerThinking}
               className={
-                workerThinking
-                  ? baseButtonStyle + pressedStyle
-                  : unpressedStyle + baseButtonStyle + 'w-full'
+                unpressedStyle + baseButtonStyle + 'grow'
               }
               onClick={() => {
                 setWorkerThinking(true)
@@ -349,11 +351,20 @@ function App() {
             >
               Solve
             </button>
+            <button className={baseButtonStyle + unpressedStyle}>
+              ?
+            </button>
+            </div>
+
+            </div>
+
           </div>
           
-        </div>
 
-        <div className="grow overflow-y-auto relative snap-y snap-mandatory">
+        
+      </div>
+
+        <div className="overflow-y-auto relative snap-y snap-mandatory h-[300px]">
           {solution === null && (
             <h2 className="text-orange-300 text-2xl">This board cannot be solved.</h2>
           )}
@@ -365,7 +376,7 @@ function App() {
             />
           )}
         </div>
-      </div>
+        </div>
     </div>
   )
 }
