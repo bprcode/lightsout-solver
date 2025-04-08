@@ -20,6 +20,11 @@
   outline: 1px solid orange;
 }
 
+@utility d2 {
+  outline: 2px solid fuchsia;
+  outline-offset: 4px;
+}
+
 @utility illuminated {
   box-shadow: inset 1px 0 0 rgb(16, 255, 187), inset 0 1px 0 rgb(31, 255, 191);
   background-image: radial-gradient(2.25rem at 65% 70%, oklch(69.6% 0.17 162.48), oklch(36.2% 0.051 172.552));
