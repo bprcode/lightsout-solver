@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import linkedSelectionSvg from './assets/linked-selection.svg'
 import unlinkedSelectionSvg from './assets/unlinked-selection.svg'
-import diceSvg from './assets/dice-icon-c.svg'
+import diceSvg from './assets/dice-icon.svg'
 export type BoardSize = 2 | 3 | 4 | 5
 export type BitBoard = number
 
@@ -258,121 +258,132 @@ function App() {
   const unpressedStyle =
     'bg-emerald-700 light-edge-shadow hover:bg-emerald-600 active:bg-emerald-800 active:text-emerald-100 active:inset-shadow-sm active:inset-shadow-zinc-950 '
   const grayPressedStyle =
-    'bg-zinc-800 inset-shadow-sm inset-shadow-zinc-950 text-zinc-100/80 '
+    'bg-zinc-800 inset-shadow-sm inset-shadow-zinc-950 text-emerald-100/90 '
   const grayUnpressedStyle =
-    'bg-zinc-700 light-edge-shadow hover:bg-zinc-600 active:bg-zinc-800 active:text-zinc-100 active:inset-shadow-sm active:inset-shadow-zinc-950 '
+    'bg-zinc-700 text-zinc-300 light-edge-shadow hover:bg-zinc-600 active:bg-zinc-800 active:text-zinc-100 active:inset-shadow-sm active:inset-shadow-zinc-950 '
   const baseButtonStyle =
     'px-3 py-1 mb-4 rounded-lg font-semibold h-10 relative flex justify-center items-center shrink-0 '
 
   return (
     <div className="max-w-4xl mx-auto mt-8  bg-zinc-800 text-slate-200 p-4 light-edge">
-      
       <div className="flex flex-col">
-        
-
-
-      <div className="flex gap-0">
-      <div className="prose text-slate-200">
-        <h1 className="text-slate-300 font-bold mb-8 text-3xl"><em>Lights Out</em> Solver</h1>
-        <p>
-          <em>Lights Out</em> is a classic puzzle game in which the player tries
-          to switch off every light on the board. Whenever one light is changed,
-          its neighbors change in tandem.
-        </p>
-        <p>
-          This solver will find an optimal solution for any Lights Out puzzle,
-          if it exists (some boards have no solution). Just set up the board,
-          then click "solve" to see the solution.
-        </p>
-      </div>
-          <div className="flex flex-col items-center shrink-0">
-          
-          <div className="flex w-fit gap-4 items-start">
-            
-            <button
-              className={`${
-                inputMode === togglePlus ? grayPressedStyle : grayUnpressedStyle
-              } ${baseButtonStyle}`}
-              onClick={() => {
-                setInputMode(() => togglePlus)
-              }}
-            >
-              <img src={linkedSelectionSvg} className="inline-block"/>&nbsp;linked
-            </button>
-            <button
-              className={`${
-                inputMode === toggleSingle ? grayPressedStyle : grayUnpressedStyle
-              } ${baseButtonStyle}`}
-              onClick={() => setInputMode(() => toggleSingle)}
-            >
-              <img src={unlinkedSelectionSvg} className="block" />&nbsp;single
-            </button>
-            <select
-              className="bg-zinc-700 px-4 py-2 light-edge h-fit"
-              value={boardSize}
-              onChange={e => {
-                setBoardSize(Number(e.target.value) as BoardSize)
-                setBitBoard(
-                  makeRandomBoard(Number(e.target.value) as BoardSize)
-                )
-                setSolution(undefined)
-              }}
-            >
-              <option value="2">2x2</option>
-              <option value="3">3x3</option>
-              <option value="4">4x4</option>
-              <option value="5">5x5</option>
-            </select>
+        <div className="flex gap-0">
+          <div className="prose text-slate-200">
+            <h1 className="text-slate-300 font-bold mb-8 text-3xl">
+              <em>Lights Out</em> Solver
+            </h1>
+            <p>
+              <em>Lights Out</em> is a classic puzzle game in which the player
+              tries to switch off every light on the board. Whenever one light
+              is changed, its neighbors change in tandem.
+            </p>
+            <p>
+              This solver will find an optimal solution for any Lights Out
+              puzzle, if it exists (some boards have no solution). Just set up
+              the board, then click "solve" to see the solution.
+            </p>
           </div>
+          <div className="flex flex-col items-center shrink-0">
+            <div className="flex w-fit items-start gap-8">
+              <div className="flex flex-nowrap">
+                <button
+                  className={`${
+                    inputMode === togglePlus
+                      ? grayPressedStyle
+                      : grayUnpressedStyle
+                  } ${baseButtonStyle} rounded-tr-none rounded-br-none`}
+                  onClick={() => {
+                    setInputMode(() => togglePlus)
+                  }}
+                >
+                  linked
+                  <img
+                    src={linkedSelectionSvg}
+                    className={`ml-3 ${
+                      inputMode === toggleSingle ? 'opacity-65' : 'opacity-90'
+                    }`}
+                  />
+                </button>
+                <button
+                  className={`${
+                    inputMode === toggleSingle
+                      ? grayPressedStyle
+                      : grayUnpressedStyle
+                  } ${baseButtonStyle} rounded-tl-none rounded-bl-none`}
+                  onClick={() => setInputMode(() => toggleSingle)}
+                >
+                  <img
+                    src={unlinkedSelectionSvg}
+                    className={`mr-3 ${
+                      inputMode === toggleSingle ? 'opacity-100' : 'opacity-70'
+                    }`}
+                  />
+                  single
+                </button>
+              </div>
+
+              <select
+                className="bg-zinc-700 px-4 py-2 light-edge h-fit"
+                value={boardSize}
+                onChange={e => {
+                  setBoardSize(Number(e.target.value) as BoardSize)
+                  setBitBoard(
+                    makeRandomBoard(Number(e.target.value) as BoardSize)
+                  )
+                  setSolution(undefined)
+                }}
+              >
+                <option value="2">2x2</option>
+                <option value="3">3x3</option>
+                <option value="4">4x4</option>
+                <option value="5">5x5</option>
+              </select>
+            </div>
 
             <div>
-            <LightBoard
-              className="mb-4"
-              board={bitBoard}
-              size={boardSize}
-              onFlip={(r, c) => {
-                if (solution === null) {
-                  setSolution(undefined)
-                }
-                setBitBoard(inputMode(bitBoard, boardSize, r, c))
-              }}
-            />
+              <LightBoard
+                className="mb-4"
+                board={bitBoard}
+                size={boardSize}
+                onFlip={(r, c) => {
+                  if (solution === null) {
+                    setSolution(undefined)
+                  }
+                  setBitBoard(inputMode(bitBoard, boardSize, r, c))
+                }}
+              />
 
-            <div className="flex gap-4">
-            <button
-              disabled={workerThinking}
-              className={
-                unpressedStyle + baseButtonStyle + 'grow'
-              }
-              onClick={() => {
-                setWorkerThinking(true)
-                setSolution(undefined)
-                solveWorker?.postMessage({ bitBoard, boardSize })
-              }}
-            >
-              Solve
-            </button>
-            <button className={baseButtonStyle + unpressedStyle}
-            onClick={() => {
-              setSolution(undefined)
-              setBitBoard(makeRandomBoard(boardSize))
-            }}
-            >
-              <img src={diceSvg} />
-            </button>
+              <div className="flex gap-4">
+                <button
+                  disabled={workerThinking}
+                  className={unpressedStyle + baseButtonStyle + 'grow'}
+                  onClick={() => {
+                    setWorkerThinking(true)
+                    setSolution(undefined)
+                    solveWorker?.postMessage({ bitBoard, boardSize })
+                  }}
+                >
+                  Solve
+                </button>
+                <button
+                  className={baseButtonStyle + unpressedStyle}
+                  onClick={() => {
+                    setSolution(undefined)
+                    setBitBoard(makeRandomBoard(boardSize))
+                  }}
+                >
+                  <img src={diceSvg} />
+                </button>
+              </div>
             </div>
-
-            </div>
-
           </div>
-          
-
-        
-      </div>
+        </div>
 
         <div className="overflow-y-auto relative snap-y snap-mandatory h-[300px]">
           {solution === null && (
-            <h2 className="text-orange-300 text-2xl">This board cannot be solved.</h2>
+            <h2 className="text-orange-300 text-2xl">
+              This board cannot be solved.
+            </h2>
           )}
           {solution && (
             <SolutionSteps
@@ -382,7 +393,7 @@ function App() {
             />
           )}
         </div>
-        </div>
+      </div>
     </div>
   )
 }
