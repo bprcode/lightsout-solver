@@ -1,14 +1,11 @@
 type F2 = 0 | 1
 
 onmessage = e => {
-  
-
   const boardVector: F2[] = Array(e.data.boardSize ** 2)
   for (let i = 0; i < e.data.boardSize ** 2; i++) {
     boardVector[i] = e.data.bitBoard & (1 << i) ? 1 : 0
   }
 
-  
   try {
     const solution = solveBoardVector(boardVector)
     postMessage({ solution, originalBitBoard: e.data.bitBoard })

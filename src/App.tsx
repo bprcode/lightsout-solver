@@ -84,11 +84,11 @@ function LightBoard({
     const bit = board & (1 << i)
     return (
       <div
+        key={i}
         className="p-1 group"
         onClick={() => onFlip(Math.floor(i / size), i % size)}
       >
         <div
-          key={i}
           className={`${
             bit
               ? // ? 'bg-emerald-500 group-hover:bg-emerald-300 group-active:bg-teal-200 extra-light-edge'
@@ -285,6 +285,7 @@ function App() {
           <div className="flex flex-col items-center">
           
           <div className="flex w-fit gap-4 items-start">
+            
             <button
               className={`${
                 inputMode === togglePlus ? pressedStyle : unpressedStyle
