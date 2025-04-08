@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import './App.css'
 import linkedSelectionSvg from './assets/linked-selection.svg'
 import unlinkedSelectionSvg from './assets/unlinked-selection.svg'
+import diceSvg from './assets/dice-icon-c.svg'
 export type BoardSize = 2 | 3 | 4 | 5
 export type BitBoard = number
 
@@ -247,8 +248,8 @@ function App() {
     return () => worker.terminate()
   }, [])
 
-  const [bitBoard, setBitBoard] = useState<BitBoard>(makeRandomBoard(5))
   const [boardSize, setBoardSize] = useState<BoardSize>(5)
+  const [bitBoard, setBitBoard] = useState<BitBoard>(makeRandomBoard(boardSize))
 
   const [inputMode, setInputMode] = useState(() => togglePlus)
 
@@ -351,8 +352,13 @@ function App() {
             >
               Solve
             </button>
-            <button className={baseButtonStyle + unpressedStyle}>
-              ?
+            <button className={baseButtonStyle + unpressedStyle}
+            onClick={() => {
+              setSolution(undefined)
+              setBitBoard(makeRandomBoard(boardSize))
+            }}
+            >
+              <img src={diceSvg} />
             </button>
             </div>
 
