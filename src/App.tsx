@@ -89,7 +89,7 @@ function LightBoard({
     }
 
     let indexProgression = 1
-    const activeHighlights = [0]
+    const activeHighlights = [stepList[0]]
     setStepIndices(new Set<number>(activeHighlights))
 
     const applyHighlight = () => {
