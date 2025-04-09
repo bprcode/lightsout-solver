@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from 'react'
+import { useEffect, useMemo, useReducer, useState } from 'react'
 import './App.css'
 import linkedSelectionSvg from './assets/linked-selection.svg'
 import unlinkedSelectionSvg from './assets/unlinked-selection.svg'
@@ -59,6 +59,7 @@ function LightBoard({
   tagRow = NaN,
   tagCol = NaN,
   tag = '',
+  solution = undefined,
 }: {
   board: number
   size: BoardSize
@@ -67,18 +68,41 @@ function LightBoard({
   tagRow?: number
   tagCol?: number
   tag?: string
+  solution?: null | undefined | BitBoard[]
 }) {
-  const [testPseudo,toggleTest] = useReducer(x => !x, false)
-  useEffect(() => {
-    const tid = setInterval(() => {
-      toggleTest()
-    }, (2000));
-
-    return () => clearInterval(tid)
-  }, [])
+  
   if (size < 2 || size > 5) {
     throw new Error(`Unsupported board size (${size})`)
   }
+
+
+  const [stepIndices, setStepIndices] = useState(new Set<number>())
+
+  
+
+  useEffect(() => {
+    if(solution === undefined || solution === null) {
+      setStepIndices(new Set<number>())
+      return
+    }
+    console.log('lightboard solution effect')
+
+    const newStepIndices = new Set<number>()
+    for (let i = 0; i < solution.length-1; i++) {
+      const step = stepDiff(solution[i],solution[i+1],size)
+      console.log(solution[i],step)
+      newStepIndices.add(step[0]*size+step[1])
+      
+    }
+
+    setStepIndices(newStepIndices)
+
+    const tid = setTimeout(() => {
+      setStepIndices(new Set<number>())
+    }, 2000);
+
+    return () => {clearTimeout(tid)}
+  }, [solution,size])
 
   const gridCols = {
     2: 'grid-cols-[repeat(2,2.5rem)]',
@@ -97,23 +121,8 @@ function LightBoard({
         onClick={() => onFlip(Math.floor(i / size), i % size)}
       >
         <div
-          className={(() => {
-            const base = `flex justify-center w-full h-full transition `
-            switch (i) {
-              case 0:
-                return base + (testPseudo ? 'lit-bulb bulb-ping' : 'lit-bulb')
-              case 1:
-                return base + 'amethyst'
-              case 6:
-                return base + (testPseudo ? 'unlit-bulb bulb-ping' : 'unlit-bulb')
-              case 7:
-                return base + 'unlit-bulb'
-            }
-            return base + (bit
-              ? // ? 'bg-emerald-500 group-hover:bg-emerald-300 group-active:bg-teal-200 extra-light-edge'
-                'illuminated group-hover:very-illuminated group-active:bg-teal-200'
-              : 'bg-stone-800 group-hover:bg-stone-700 group-active:bg-stone-400 light-edge')
-          })()
+          className={
+            `flex justify-center w-full h-full ${bit ? 'lit-bulb' : 'unlit-bulb'} ${stepIndices.has(i) ? 'bulb-ping' : ''}`
         }
         >
           {i === tagIndex && (
@@ -322,6 +331,7 @@ function App() {
                   }
                   setBitBoard(inputMode(bitBoard, boardSize, r, c))
                 }}
+                solution={solution}
               />
 
               <div className="flex gap-4">

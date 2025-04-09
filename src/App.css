@@ -36,7 +36,7 @@
 
 @utility lit-bulb {
   position: relative;
-  transition: background-color 0.25s ease-out !important;
+  transition: background-color 0.1s ease-out, box-shadow 0.4s ease-out;
 
   background-color: oklch(0.35 0.0629 157.22);
 
@@ -73,7 +73,7 @@
 @utility bulb-ping {
   background-color: oklch(0.87 0.1376 85.14);
   box-shadow: inset 1px 0 0 rgb(255, 133, 207), inset 0 1px 0 rgb(255, 214, 136);
-  transition: background-color 0.25s ease-out !important;
+  transition: background-color 0.25s ease-out, box-shadow 1s ease-out;
 
   &::before {
     opacity: 0;
@@ -85,13 +85,13 @@
 
 @utility unlit-bulb {
   position: relative;
-  transition: background-color 0.25s ease-out !important;
+  transition: background-color 0.3s ease-out, box-shadow 0.4s ease-out;
   background-color: var(--color-stone-800);
 
-  box-shadow: inset 1px 0 0 rgb(90, 93, 110), inset 0 1px 0 rgb(105, 112, 115);
+  box-shadow: inset 1px 0 0 rgb(90, 94, 115), inset 0 1px 0 rgb(105, 112, 125);
 
   &::before {
-    opacity: 1;
+    opacity: 0;
     position: absolute;
     inset: 0;
     content: '';
