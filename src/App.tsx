@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useReducer, useState } from 'react'
 import './App.css'
 import linkedSelectionSvg from './assets/linked-selection.svg'
 import unlinkedSelectionSvg from './assets/unlinked-selection.svg'
@@ -68,6 +68,14 @@ function LightBoard({
   tagCol?: number
   tag?: string
 }) {
+  const [testPseudo,toggleTest] = useReducer(x => !x, false)
+  useEffect(() => {
+    const tid = setInterval(() => {
+      toggleTest()
+    }, (2000));
+
+    return () => clearInterval(tid)
+  }, [])
   if (size < 2 || size > 5) {
     throw new Error(`Unsupported board size (${size})`)
   }
@@ -89,7 +97,7 @@ function LightBoard({
         onClick={() => onFlip(Math.floor(i / size), i % size)}
       >
         <div
-          className={(i === 0 || i === 1) ? (i === 1 ? 'amethyst flex justify-center w-full h-full transition' : 'limelight flex justify-center w-full h-full transition') : `${
+          className={(i === 0 || i === 1) ? (i === 1 ? `amethyst flex justify-center w-full h-full transition` : `${testPseudo ? 'limelight-on' : ''} limelight flex justify-center w-full h-full transition`) : `${
             bit
               ? // ? 'bg-emerald-500 group-hover:bg-emerald-300 group-active:bg-teal-200 extra-light-edge'
                 'illuminated group-hover:very-illuminated group-active:bg-teal-200'
