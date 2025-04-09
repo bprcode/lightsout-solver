@@ -113,6 +113,22 @@
   }
 }
 
+@keyframes reveal-down {
+  from {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@utility initial-reveal {
+  --reveal-delay: 2s;
+  animation: 1s var(--reveal-delay) reveal-down ease-out backwards;
+}
+
 @utility amethyst {
   box-shadow: inset 1px 0 0 rgb(255, 133, 207), inset 0 1px 0 rgb(255, 214, 136);
   background-image: radial-gradient(

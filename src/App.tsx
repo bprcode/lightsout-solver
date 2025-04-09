@@ -89,7 +89,9 @@ function LightBoard({
     }
 
     let indexProgression = 1
+    const frameTime = 600 / stepList.length
     const activeHighlights = [stepList[0]]
+    let waitAtEnd = true
     setStepIndices(new Set<number>(activeHighlights))
 
     const applyHighlight = () => {
@@ -99,9 +101,15 @@ function LightBoard({
           return
         }
 
+        if(waitAtEnd) {
+          waitAtEnd = false
+          tid = setTimeout(applyHighlight, frameTime*10)
+          return
+        }
+
         activeHighlights.shift()
         setStepIndices(new Set<number>(activeHighlights))
-        tid = setTimeout(applyHighlight, 100)
+        tid = setTimeout(applyHighlight, frameTime)
 
         return
       }
@@ -111,10 +119,10 @@ function LightBoard({
 
       setStepIndices(new Set<number>(activeHighlights))
 
-      tid = setTimeout(applyHighlight, 100)
+      tid = setTimeout(applyHighlight, frameTime)
     }
 
-    let tid = setTimeout(applyHighlight, 100)
+    let tid = setTimeout(applyHighlight, frameTime)
 
     return () => {
       clearTimeout(tid)
@@ -144,7 +152,7 @@ function LightBoard({
         >
           {i === tagIndex && (
             <div
-              className={`outline-2 ${
+              className={`z-10 outline-2 ${
                 bit ? 'outline-orange-500' : 'outline-orange-500'
               } ${
                 bit ? 'bg-orange-900/90' : 'bg-orange-900/50'
@@ -216,6 +224,58 @@ function stepDiff(
   return center
 }
 
+const revealDelays = [
+  '[--reveal-delay:0.7s]',
+  '[--reveal-delay:1.1s]',
+  '[--reveal-delay:1.5s]',
+  '[--reveal-delay:1.9s]',
+  '[--reveal-delay:2.3s]',
+  '[--reveal-delay:2.7s]',
+]
+
+function SolutionWrapper({
+  solution,
+  size,
+}: {
+  solution: BitBoard[]
+  size: BoardSize
+}) {
+  const resetKey = useMemo(() => solution.join(''), [solution])
+  return (
+    <>
+      {solution && (
+        <>
+          <h3
+            className={`text-slate-300 mb-4 text-xl initial-reveal ${revealDelays[0]}`}
+            key={resetKey}
+          >
+            Solution steps ({solution.length})
+          </h3>
+          <hr className="opacity-50" />
+        </>
+      )}
+      <div className="overflow-y-auto relative h-full snap-y">
+        {solution === null && (
+          <h2 className="text-orange-300 text-2xl">
+            This board cannot be solved.
+          </h2>
+        )}
+
+        {solution && (
+          <SolutionSteps
+            className="absolute pt-10 pb-20"
+            solution={solution}
+            size={size}
+          />
+        )}
+        {/* overlap blocks interaction with solution steps -- intentional: */}
+        <div className="w-full top-0 mt-auto h-full sticky">
+          <div className="absolute w-full bottom-0 h-16 bg-linear-to-t from-zinc-800 to-zinc-800/0" />
+        </div>
+      </div>
+    </>
+  )
+}
 function SolutionSteps({
   solution,
   size,
@@ -239,7 +299,13 @@ function SolutionSteps({
                 key={i}
                 board={s}
                 size={size}
-                className="mb-4 snap-center"
+                className={`mb-4 snap-center initial-reveal ${
+                  revealDelays[
+                    i + 1 < revealDelays.length
+                      ? i + 1
+                      : revealDelays.length - 1
+                  ]
+                }`}
                 tagRow={diff ? diff[0] : undefined}
                 tagCol={diff ? diff[1] : undefined}
                 tag={diff ? String(i + 1) : s === 0 ? 'Done!' : undefined}
@@ -462,31 +528,7 @@ function App() {
 
         {/* Solution section */}
         <div className="row-span-2">
-          {solution && (
-            <>
-              <h3 className="text-slate-300 mb-4 text-xl">Solution steps:</h3>
-              <hr className="opacity-50" />
-            </>
-          )}
-          <div className="overflow-y-auto relative h-full snap-y">
-            {solution === null && (
-              <h2 className="text-orange-300 text-2xl">
-                This board cannot be solved.
-              </h2>
-            )}
-
-            {solution && (
-              <SolutionSteps
-                className="absolute pt-10 pb-20"
-                solution={solution}
-                size={boardSize}
-              />
-            )}
-            {/* overlap blocks interaction with solution steps -- intentional: */}
-            <div className="w-full top-0 mt-auto h-full sticky">
-              <div className="absolute w-full bottom-0 h-16 bg-linear-to-t from-zinc-800 to-zinc-800/0" />
-            </div>
-          </div>
+          {solution && <SolutionWrapper solution={solution} size={boardSize} />}
         </div>
       </div>
     </div>
