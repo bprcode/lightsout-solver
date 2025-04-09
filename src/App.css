@@ -32,22 +32,29 @@
 
 @utility limelight {
   position: relative;
+  transition: background-color 0.25s ease-out !important;
+
+  background-color: #18432c;
   
   box-shadow: inset 1px 0 0 rgb(0, 225, 180), inset 0 1px 0 rgb(30, 255, 191);
-  background-image: radial-gradient(in oklch 2.25rem at 65% 70%, #00c986, #18432c);
+  /* background-image: radial-gradient(in oklch 2.25rem at 65% 70%, #00c986, #18432c); */
+  background-image: radial-gradient(in oklch 2.25rem at 65% 70%, #00c986, transparent);
   
   &::before {
     opacity:0;
     position: absolute;
     inset:0;
     content: '';
-    transition: opacity 0.5s ease-out;
+    transition: opacity 0.75s ease-out;
     box-shadow: inset 1px 0 0 rgb(255, 133, 207), inset 0 1px 0 rgb(255, 214, 136);
     background-image: radial-gradient(in oklch 2.25rem at 65% 70%, #ffb098, #0014b8);
   }
 }
 
 @utility limelight-on {
+  background-color: #7eff39;
+  transition: background-color 0.25s ease-out !important;
+
   &::before {
     opacity: 1;
   }
