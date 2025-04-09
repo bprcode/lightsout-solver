@@ -97,12 +97,24 @@ function LightBoard({
         onClick={() => onFlip(Math.floor(i / size), i % size)}
       >
         <div
-          className={(i === 0 || i === 1) ? (i === 1 ? `amethyst flex justify-center w-full h-full transition` : `${testPseudo ? 'limelight-on' : ''} limelight flex justify-center w-full h-full transition`) : `${
-            bit
+          className={(() => {
+            const base = `flex justify-center w-full h-full transition `
+            switch (i) {
+              case 0:
+                return base + (testPseudo ? 'lit-bulb bulb-ping' : 'lit-bulb')
+              case 1:
+                return base + 'amethyst'
+              case 6:
+                return base + (testPseudo ? 'unlit-bulb bulb-ping' : 'unlit-bulb')
+              case 7:
+                return base + 'unlit-bulb'
+            }
+            return base + (bit
               ? // ? 'bg-emerald-500 group-hover:bg-emerald-300 group-active:bg-teal-200 extra-light-edge'
                 'illuminated group-hover:very-illuminated group-active:bg-teal-200'
-              : 'bg-stone-800 group-hover:bg-stone-700 group-active:bg-stone-400 light-edge'
-          } flex justify-center w-full h-full transition`}
+              : 'bg-stone-800 group-hover:bg-stone-700 group-active:bg-stone-400 light-edge')
+          })()
+        }
         >
           {i === tagIndex && (
             <div
@@ -346,6 +358,8 @@ function App() {
               </select>
 
               <div className="flex flex-col">
+              Linked
+
                 <button
                   className={`${
                     inputMode === togglePlus
@@ -362,7 +376,6 @@ function App() {
                       inputMode === toggleSingle ? 'opacity-65' : 'opacity-90'
                     }`}
                   />
-                  linked
                 </button>
                 <button
                   className={`${
@@ -378,8 +391,8 @@ function App() {
                       inputMode === toggleSingle ? 'opacity-100' : 'opacity-70'
                     }`}
                   />
-                  single
                 </button>
+                  Single
               </div>
 
               <button

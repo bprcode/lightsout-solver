@@ -27,40 +27,52 @@
 
 @utility illuminated {
   box-shadow: inset 1px 0 0 rgb(0, 225, 180), inset 0 1px 0 rgb(30, 255, 191);
-  background-image: radial-gradient(in oklch 2.25rem at 65% 70%, #00c986, #18432c);
+  background-image: radial-gradient(
+    in oklch 2.25rem at 65% 70%,
+    #00c986,
+    #18432c
+  );
 }
 
-@utility limelight {
+@utility lit-bulb {
   position: relative;
   transition: background-color 0.25s ease-out !important;
 
   background-color: oklch(0.35 0.0629 157.22);
-  
+
   box-shadow: inset 1px 0 0 rgb(0, 225, 180), inset 0 1px 0 rgb(30, 255, 191);
-  /* background-image: radial-gradient(in oklch 2.25rem at 65% 70%, #00c986, #18432c); */
-  /* background-image: radial-gradient(in oklch 2.25rem at 65% 70%, #00c986, transparent); */
-  
+
   &::before {
-    opacity:1;
+    opacity: 1;
     position: absolute;
-    inset:0;
+    inset: 0;
     content: '';
     transition: opacity 0.15s ease-out;
-    background-image: radial-gradient(in oklch 2.1rem at 68% 68%, #00c986f0, transparent);
+    background-image: radial-gradient(
+      in oklch 2.1rem at 68% 68%,
+      #00c986f0,
+      transparent
+    );
   }
   &::after {
-    opacity:0;
+    opacity: 0;
     position: absolute;
-    inset:0;
+    inset: 0;
     content: '';
     transition: opacity 0.75s ease-out;
-    box-shadow: inset 1px 0 0 rgb(255, 133, 207), inset 0 1px 0 rgb(255, 214, 136);
-    background-image: radial-gradient(in oklch 2.25rem at 65% 70%, #ffb098, #0014b8);
+    box-shadow: inset 1px 0 0 rgb(255, 133, 207),
+      inset 0 1px 0 rgb(255, 214, 136);
+    background-image: radial-gradient(
+      in oklch 2.25rem at 65% 70%,
+      #ffb098,
+      #0014b8
+    );
   }
 }
 
-@utility limelight-on {
+@utility bulb-ping {
   background-color: oklch(0.87 0.1376 85.14);
+  box-shadow: inset 1px 0 0 rgb(255, 133, 207), inset 0 1px 0 rgb(255, 214, 136);
   transition: background-color 0.25s ease-out !important;
 
   &::before {
@@ -71,15 +83,52 @@
   }
 }
 
+@utility unlit-bulb {
+  position: relative;
+  transition: background-color 0.25s ease-out !important;
+  background-color: var(--color-stone-800);
+
+  box-shadow: inset 1px 0 0 rgb(90, 93, 110), inset 0 1px 0 rgb(105, 112, 115);
+
+  &::before {
+    opacity: 1;
+    position: absolute;
+    inset: 0;
+    content: '';
+    transition: opacity 0.15s ease-out;
+  }
+  &::after {
+    opacity: 0;
+    position: absolute;
+    inset: 0;
+    content: '';
+    transition: opacity 0.75s ease-out;
+    box-shadow: inset 1px 0 0 rgb(255, 133, 207),
+      inset 0 1px 0 rgb(255, 214, 136);
+    background-image: radial-gradient(
+      in oklch 2.25rem at 65% 70%,
+      #ffb098,
+      #0014b8
+    );
+  }
+}
 
 @utility amethyst {
   box-shadow: inset 1px 0 0 rgb(255, 133, 207), inset 0 1px 0 rgb(255, 214, 136);
-  background-image: radial-gradient(in oklch 2.25rem at 65% 70%, #ffb098, #0014b8);
+  background-image: radial-gradient(
+    in oklch 2.25rem at 65% 70%,
+    #ffb098,
+    #0014b8
+  );
 }
 
 @utility very-illuminated {
   box-shadow: inset 1px 0 0 rgb(32, 255, 162), inset 0 1px 0 rgb(48, 255, 189);
-  background-image: radial-gradient(2.75rem at 65% 70%, oklch(79.6% 0.17 162.48), oklch(56.2% 0.051 172.552));
+  background-image: radial-gradient(
+    2.75rem at 65% 70%,
+    oklch(79.6% 0.17 162.48),
+    oklch(56.2% 0.051 172.552)
+  );
 }
 
 @utility light-edge {
