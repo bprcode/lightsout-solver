@@ -249,7 +249,7 @@ function SolutionWrapper({
             className={`text-slate-300 mb-4 text-xl initial-reveal ${revealDelays[0]}`}
             key={resetKey}
           >
-            Solution steps ({solution.length})
+            Solution steps ({solution.length - 1})
           </h3>
           <hr className="opacity-50" />
         </>
