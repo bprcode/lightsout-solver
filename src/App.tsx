@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useReducer, useState } from 'react'
+import { act, useEffect, useMemo, useReducer, useState } from 'react'
 import './App.css'
 import linkedSelectionSvg from './assets/linked-selection.svg'
 import unlinkedSelectionSvg from './assets/unlinked-selection.svg'
@@ -70,39 +70,56 @@ function LightBoard({
   tag?: string
   solution?: null | undefined | BitBoard[]
 }) {
-  
   if (size < 2 || size > 5) {
     throw new Error(`Unsupported board size (${size})`)
   }
 
-
   const [stepIndices, setStepIndices] = useState(new Set<number>())
 
-  
-
   useEffect(() => {
-    if(solution === undefined || solution === null) {
+    if (solution === undefined || solution === null) {
       setStepIndices(new Set<number>())
       return
     }
-    console.log('lightboard solution effect')
 
-    const newStepIndices = new Set<number>()
-    for (let i = 0; i < solution.length-1; i++) {
-      const step = stepDiff(solution[i],solution[i+1],size)
-      console.log(solution[i],step)
-      newStepIndices.add(step[0]*size+step[1])
-      
+    const stepList: number[] = []
+    for (let i = 0; i < solution.length - 1; i++) {
+      const step = stepDiff(solution[i], solution[i + 1], size)
+      stepList.push(step[0] * size + step[1])
     }
 
-    setStepIndices(newStepIndices)
+    let indexProgression = 1
+    const activeHighlights = [0]
+    setStepIndices(new Set<number>(activeHighlights))
 
-    const tid = setTimeout(() => {
-      setStepIndices(new Set<number>())
-    }, 2000);
+    const applyHighlight = () => {
+      if (indexProgression === stepList.length) {
+        if (!activeHighlights.length) {
+          setStepIndices(new Set<number>())
+          return
+        }
 
-    return () => {clearTimeout(tid)}
-  }, [solution,size])
+        activeHighlights.shift()
+        setStepIndices(new Set<number>(activeHighlights))
+        tid = setTimeout(applyHighlight, 100)
+
+        return
+      }
+
+      activeHighlights.push(stepList[indexProgression])
+      indexProgression++
+
+      setStepIndices(new Set<number>(activeHighlights))
+
+      tid = setTimeout(applyHighlight, 100)
+    }
+
+    let tid = setTimeout(applyHighlight, 100)
+
+    return () => {
+      clearTimeout(tid)
+    }
+  }, [solution, size])
 
   const gridCols = {
     2: 'grid-cols-[repeat(2,2.5rem)]',
@@ -121,9 +138,9 @@ function LightBoard({
         onClick={() => onFlip(Math.floor(i / size), i % size)}
       >
         <div
-          className={
-            `flex justify-center w-full h-full ${bit ? 'lit-bulb' : 'unlit-bulb'} ${stepIndices.has(i) ? 'bulb-ping' : ''}`
-        }
+          className={`flex justify-center w-full h-full ${
+            bit ? 'lit-bulb' : 'unlit-bulb'
+          } ${stepIndices.has(i) ? 'bulb-ping' : ''}`}
         >
           {i === tagIndex && (
             <div
@@ -301,7 +318,6 @@ function App() {
       <h1 className="text-slate-300 font-bold mb-6 text-3xl">
         <em>Lights Out</em> Solver
       </h1>
-      
 
       <div className="grid  grid-flow-col grid-cols-[max-content_1fr] grid-rows-[min-content_1fr] gap-x-8">
         <section className="text-slate-200 prose mb-10">
@@ -368,8 +384,7 @@ function App() {
               </select>
 
               <div className="flex flex-col">
-              Linked
-
+                Linked
                 <button
                   className={`${
                     inputMode === togglePlus
@@ -402,7 +417,7 @@ function App() {
                     }`}
                   />
                 </button>
-                  Single
+                Single
               </div>
 
               <button
