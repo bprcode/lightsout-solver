@@ -89,7 +89,7 @@ function LightBoard({
         onClick={() => onFlip(Math.floor(i / size), i % size)}
       >
         <div
-          className={`${
+          className={(i === 0 || i === 1) ? (i === 1 ? 'amethyst flex justify-center w-full h-full transition' : 'limelight flex justify-center w-full h-full transition') : `${
             bit
               ? // ? 'bg-emerald-500 group-hover:bg-emerald-300 group-active:bg-teal-200 extra-light-edge'
                 'illuminated group-hover:very-illuminated group-active:bg-teal-200'
@@ -209,8 +209,7 @@ function SolutionSteps({
 function App() {
   const [workerThinking, setWorkerThinking] = useState(false)
   const [solution, setSolution] = useState<BitBoard[] | undefined | null>([
-    6466819,
-    6466884,6470784,6325248,7405568,0
+    6466819, 6466884, 6470784, 6325248, 7405568, 0,
   ])
   const [solveWorker, setSolveWorker] = useState<Worker | null>(null)
 
@@ -241,7 +240,7 @@ function App() {
         }
       }
 
-      console.log('storing solution:',newSolution)
+      console.log('storing solution:', newSolution)
       setSolution(newSolution)
     }
 
@@ -273,6 +272,8 @@ function App() {
       <h1 className="text-slate-300 font-bold mb-6 text-3xl">
         <em>Lights Out</em> Solver
       </h1>
+      
+
       <div className="grid  grid-flow-col grid-cols-[max-content_1fr] grid-rows-[min-content_1fr] gap-x-8">
         <section className="text-slate-200 prose mb-10">
           <p>
@@ -421,24 +422,23 @@ function App() {
               <hr className="opacity-50" />
             </>
           )}
-          <div className="overflow-y-auto relative h-[100%] snap-y">
+          <div className="overflow-y-auto relative h-full snap-y">
             {solution === null && (
               <h2 className="text-orange-300 text-2xl">
                 This board cannot be solved.
               </h2>
             )}
 
-
             {solution && (
               <SolutionSteps
-              className="absolute pt-10 pb-20"
-              solution={solution}
-              size={boardSize}
+                className="absolute pt-10 pb-20"
+                solution={solution}
+                size={boardSize}
               />
             )}
             {/* overlap blocks interaction with solution steps -- intentional: */}
             <div className="w-full top-0 mt-auto h-full sticky">
-            <div className="absolute w-full bottom-0 h-16 bg-linear-to-t from-zinc-800 to-zinc-800/0" />
+              <div className="absolute w-full bottom-0 h-16 bg-linear-to-t from-zinc-800 to-zinc-800/0" />
             </div>
           </div>
         </div>

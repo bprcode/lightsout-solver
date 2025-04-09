@@ -26,14 +26,30 @@
 }
 
 @utility illuminated {
-  box-shadow: inset 1px 0 0 rgb(16, 255, 187), inset 0 1px 0 rgb(31, 255, 191);
-  background-image: radial-gradient(2.25rem at 65% 70%, oklch(69.6% 0.17 162.48), oklch(36.2% 0.051 172.552));
+  box-shadow: inset 1px 0 0 rgb(0, 225, 180), inset 0 1px 0 rgb(30, 255, 191);
+  background-image: radial-gradient(in oklch 2.25rem at 65% 70%, #00c986, #18432c);
   
   /* background-image: radial-gradient(2.25rem at 65% 70%, oklch(69.6% 0.17 162.48), oklch(26.2% 0.051 172.552));
   box-shadow: 
   inset 3px 3px 0.125rem -2px oklch(0.82 0.1973 159.03),
   inset -3px -3px 0.25rem -2px oklch(0.82 0.1973 159.03)
   ; */
+}
+
+@utility limelight {
+  box-shadow:
+    inset 1px 0 0 rgb(16, 255, 187),
+    inset 0 1px 0 rgb(31, 255, 191),
+    inset 0 1px 1rem #00bc7d,
+    inset 0 1px 10rem #1d463b
+    ;
+
+  background-color: black;
+}
+
+@utility amethyst {
+  box-shadow: inset 1px 0 0 rgb(255, 133, 207), inset 0 1px 0 rgb(255, 214, 136);
+  background-image: radial-gradient(in oklch 2.25rem at 65% 70%, #ffb098, #0014b8);
 }
 
 @utility very-illuminated {
