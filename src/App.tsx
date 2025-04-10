@@ -152,13 +152,14 @@ function LightBoard({
         >
           {i === tagIndex && (
             <div
-              className={`z-10 outline-2 ${
-                bit ? 'outline-orange-500' : 'outline-orange-500'
-              } ${
-                bit ? 'bg-orange-900/90' : 'bg-orange-900/50'
-              } w-100 rounded-full flex justify-center`}
+              // className={`z-10 outline-2 ${
+              //   bit ? 'outline-orange-500' : 'outline-orange-500'
+              // } ${
+              //   bit ? 'bg-orange-900/90' : 'bg-orange-900/50'
+              // } w-100 rounded-full flex justify-center`}
+              className={`z-10 size-[28px] top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-[50%] absolute  flex justify-center high-contrast-amethyst`}
             >
-              {tag}
+              <span className="[line-height:24px] [color:#fff]">{tag}</span>
             </div>
           )}
         </div>
@@ -175,7 +176,7 @@ function LightBoard({
     >
       {cells}
       {board === 0 && tag && (
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full px-3 py-1 bg-orange-950/80 outline-orange-500 outline-2">
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full px-3 py-1 high-contrast-amethyst">
           {tag}
         </div>
       )}

@@ -138,6 +138,12 @@
   );
 }
 
+@utility high-contrast-amethyst {
+  text-shadow: 2px 2px 8px rgb(54, 6, 36);
+  box-shadow: inset 1px 0 0 rgb(255, 237, 170), inset 0 1px 0 rgb(255, 214, 136), inset -1px -1px 0 rgb(255, 136, 227), 1px 1px 2px rgb(150, 0, 47);
+  background-image: radial-gradient( in oklch 3.5rem at 18% 24%, #820e75, #ff918b );
+}
+
 @utility very-illuminated {
   box-shadow: inset 1px 0 0 rgb(32, 255, 162), inset 0 1px 0 rgb(48, 255, 189);
   background-image: radial-gradient(
