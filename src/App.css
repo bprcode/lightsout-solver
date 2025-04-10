@@ -100,10 +100,10 @@
   box-shadow: inset 1px 0 0 rgb(90, 94, 115), inset 0 1px 0 rgb(105, 112, 125);
 
   background-image: radial-gradient(
-      in hsl 2.75rem at 75% 77%,
-      hsl(234, 16%, 25%),
-      hsl(244,1%,12%)
-    );
+    in hsl 2.75rem at 75% 77%,
+    hsl(234, 16%, 25%),
+    hsl(244, 1%, 12%)
+  );
 
   &::before {
     opacity: 0;
@@ -127,15 +127,23 @@
     );
   }
   &:hover {
+    transition: box-shadow 0s;
+    box-shadow: inset 1px 1px 0 hsl(224, 33%, 54%);
     background-image: radial-gradient(
       in hsl 2.25rem at 65% 70%,
-      hsl(184, 29%, 28%),
-      hsl(244,2%,18%)
+      hsl(224, 29%, 38%),
+      hsl(244, 10%, 12%)
     );
   }
 
   &:active {
-    filter: brightness(150%);
+    box-shadow: inset 1px 1px 0 hsl(160, 100%, 39%);
+
+    background-image: radial-gradient(
+      in hsl 2.75rem at 68% 68%,
+      hsl(160, 100%, 45%),
+      hsl(160, 40%, 30%)
+    );
   }
 }
 
