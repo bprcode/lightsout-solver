@@ -176,7 +176,7 @@ function LightBoard({
     >
       {cells}
       {board === 0 && tag && (
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full px-3 py-1 high-contrast-amethyst">
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full px-3 py-1 amethyst-done">
           {tag}
         </div>
       )}

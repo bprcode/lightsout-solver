@@ -144,6 +144,12 @@
   background-image: radial-gradient( in oklch 3rem at 30% 30%, hsl(275, 55%, 48%), hsl(3,100%,77%) );
 }
 
+@utility amethyst-done {
+  text-shadow: 2px 2px 9px rgb(54, 6, 36);
+  box-shadow: inset 1px 0 0 rgb(255, 170, 183), inset 0 1px 0 rgb(255, 214, 136), inset -1px -1px 0 rgb(255, 121, 121), 1px 1px 2px rgb(150, 0, 47);
+  background-image: radial-gradient( in oklch 8rem at 24% -10%, hsl(275, 55%, 40%), hsl(3,100%,70%) );
+}
+
 @utility very-illuminated {
   box-shadow: inset 1px 0 0 rgb(32, 255, 162), inset 0 1px 0 rgb(48, 255, 189);
   background-image: radial-gradient(
