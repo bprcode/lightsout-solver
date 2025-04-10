@@ -54,6 +54,15 @@
       transparent
     );
   }
+
+  &:hover {
+    filter: brightness(120%) saturate(130%) hue-rotate(5deg);
+  }
+
+  &:active {
+    filter: brightness(70%) saturate(120%) hue-rotate(10deg);
+  }
+
   &::after {
     opacity: 0;
     position: absolute;
@@ -90,6 +99,12 @@
 
   box-shadow: inset 1px 0 0 rgb(90, 94, 115), inset 0 1px 0 rgb(105, 112, 125);
 
+  background-image: radial-gradient(
+      in oklch 2.25rem at 65% 70%,
+      #193e4a,
+      #1e1e1e
+    );
+
   &::before {
     opacity: 0;
     position: absolute;
@@ -110,6 +125,17 @@
       #ffb098,
       #0014b8
     );
+  }
+  &:hover {
+    filter: brightness(130%) saturate(130%) hue-rotate(5deg);
+  }
+  &:hover::after {
+    opacity: 1;
+    transition: opacity 0.15s ease-out;
+  }
+
+  &:active {
+    filter: brightness(150%) saturate(250%) hue-rotate(20deg);
   }
 }
 
@@ -140,14 +166,24 @@
 
 @utility high-contrast-amethyst {
   text-shadow: 2px 2px 9px rgb(54, 6, 36);
-  box-shadow: inset 1px 0 0 rgb(255, 170, 183), inset 0 1px 0 rgb(255, 214, 136), inset -1px -1px 0 rgb(255, 121, 121), 1px 1px 2px rgb(150, 0, 47);
-  background-image: radial-gradient( in oklch 3rem at 30% 30%, hsl(275, 55%, 48%), hsl(3,100%,77%) );
+  box-shadow: inset 1px 0 0 rgb(255, 170, 183), inset 0 1px 0 rgb(255, 214, 136),
+    inset -1px -1px 0 rgb(255, 121, 121), 1px 1px 2px rgb(150, 0, 47);
+  background-image: radial-gradient(
+    in oklch 3.5rem at 30% 30%,
+    hsl(275, 55%, 44%),
+    hsl(3, 100%, 77%)
+  );
 }
 
 @utility amethyst-done {
   text-shadow: 2px 2px 9px rgb(54, 6, 36);
-  box-shadow: inset 1px 0 0 rgb(255, 170, 183), inset 0 1px 0 rgb(255, 214, 136), inset -1px -1px 0 rgb(255, 121, 121), 1px 1px 2px rgb(150, 0, 47);
-  background-image: radial-gradient( in oklch 8rem at 24% -10%, hsl(275, 55%, 40%), hsl(3,100%,70%) );
+  box-shadow: inset 1px 0 0 rgb(255, 170, 183), inset 0 1px 0 rgb(255, 214, 136),
+    inset -1px -1px 0 rgb(255, 121, 121), 1px 1px 2px rgb(150, 0, 47);
+  background-image: radial-gradient(
+    in oklch 8rem at 24% -10%,
+    hsl(275, 55%, 40%),
+    hsl(3, 100%, 70%)
+  );
 }
 
 @utility very-illuminated {
