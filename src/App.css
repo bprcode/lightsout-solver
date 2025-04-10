@@ -100,9 +100,9 @@
   box-shadow: inset 1px 0 0 rgb(90, 94, 115), inset 0 1px 0 rgb(105, 112, 125);
 
   background-image: radial-gradient(
-      in oklch 2.25rem at 65% 70%,
-      #193e4a,
-      #1e1e1e
+      in hsl 2.25rem at 65% 70%,
+      hsl(244, 19%, 20%),
+      hsl(244,2%,14%)
     );
 
   &::before {
@@ -127,11 +127,11 @@
     );
   }
   &:hover {
-    filter: brightness(130%) saturate(130%) hue-rotate(5deg);
-  }
-  &:hover::after {
-    opacity: 1;
-    transition: opacity 0.15s ease-out;
+    background-image: radial-gradient(
+      in oklch 2.25rem at 65% 70%,
+      #205f68,
+      #1e1e1e
+    );
   }
 
   &:active {
