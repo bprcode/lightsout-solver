@@ -36,9 +36,12 @@ export function toggleSingle(
 }
 
 function makeRandomBoard(size: BoardSize) {
+  console.log('generating random board:')
   let board = 0
   for (let i = 0; i < 7; i++) {
     const position = Math.floor(Math.random() * size ** 2)
+    console.log(i+1,'\ttoggling',[Math.floor(position / size),
+      position % size])
     board = togglePlus(
       board,
       size,
@@ -358,7 +361,7 @@ function App() {
   }, [])
 
   const [boardSize, setBoardSize] = useState<BoardSize>(5)
-  const [bitBoard, setBitBoard] = useState<BitBoard>(makeRandomBoard(boardSize))
+  const [bitBoard, setBitBoard] = useState<BitBoard>(() => makeRandomBoard(boardSize))
 
   const [inputMode, setInputMode] = useState(() => togglePlus)
 
