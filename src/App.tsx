@@ -1,4 +1,4 @@
-import { act, useEffect, useMemo, useReducer, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import './App.css'
 import linkedSelectionSvg from './assets/linked-selection.svg'
 import unlinkedSelectionSvg from './assets/unlinked-selection.svg'
@@ -40,8 +40,10 @@ function makeRandomBoard(size: BoardSize) {
   let board = 0
   for (let i = 0; i < 7; i++) {
     const position = Math.floor(Math.random() * size ** 2)
-    console.log(i+1,'\ttoggling',[Math.floor(position / size),
-      position % size])
+    console.log(i + 1, '\ttoggling', [
+      Math.floor(position / size),
+      position % size,
+    ])
     board = togglePlus(
       board,
       size,
@@ -85,28 +87,22 @@ function LightBoard({
       return
     }
 
-    const stepList: number[] = []
-    for (let i = 0; i < solution.length - 1; i++) {
-      const step = stepDiff(solution[i], solution[i + 1], size)
-      stepList.push(step[0] * size + step[1])
-    }
-
     let indexProgression = 1
-    const frameTime = 600 / stepList.length
-    const activeHighlights = [stepList[0]]
+    const frameTime = 600 / solution.length
+    const activeHighlights = [solution[0]]
     let waitAtEnd = true
     setStepIndices(new Set<number>(activeHighlights))
 
     const applyHighlight = () => {
-      if (indexProgression === stepList.length) {
+      if (indexProgression === solution.length) {
         if (!activeHighlights.length) {
           setStepIndices(new Set<number>())
           return
         }
 
-        if(waitAtEnd) {
+        if (waitAtEnd) {
           waitAtEnd = false
-          tid = setTimeout(applyHighlight, frameTime*10)
+          tid = setTimeout(applyHighlight, frameTime * 10)
           return
         }
 
@@ -117,7 +113,7 @@ function LightBoard({
         return
       }
 
-      activeHighlights.push(stepList[indexProgression])
+      activeHighlights.push(solution[indexProgression])
       indexProgression++
 
       setStepIndices(new Set<number>(activeHighlights))
@@ -182,47 +178,6 @@ function LightBoard({
   )
 }
 
-function stepDiff(
-  before: BitBoard,
-  after: BitBoard,
-  size: BoardSize
-): [number, number] {
-  const center: [number, number] = [NaN, NaN]
-  for (let row = 0; row < size && isNaN(center[0]); row++) {
-    let differences = 0
-    for (let col = 0; col < size; col++) {
-      if (
-        (before & (1 << (row * size + col))) !==
-        (after & (1 << (row * size + col)))
-      ) {
-        differences++
-        if (differences === 2) {
-          center[0] = row
-          break
-        }
-      }
-    }
-  }
-
-  for (let col = 0; col < size && isNaN(center[1]); col++) {
-    let differences = 0
-    for (let row = 0; row < size; row++) {
-      if (
-        (before & (1 << (row * size + col))) !==
-        (after & (1 << (row * size + col)))
-      ) {
-        differences++
-        if (differences === 2) {
-          center[1] = col
-          break
-        }
-      }
-    }
-  }
-
-  return center
-}
-
 const revealDelays = [
   '[--reveal-delay:0.7s]',
   '[--reveal-delay:1.1s]',
@@ -234,12 +189,24 @@ const revealDelays = [
 
 function SolutionWrapper({
   solution,
+  initialBoard,
   size,
 }: {
-  solution: BitBoard[]
+  solution: number[] | undefined | null
+  initialBoard: BitBoard
   size: BoardSize
 }) {
-  const resetKey = useMemo(() => solution.join(''), [solution])
+  const resetKey = useMemo(() => (solution ? solution.join('') : 0), [solution])
+
+  if (solution === undefined) {
+    return <></>
+  }
+  if (solution === null) {
+    return (
+      <div className="text-orange-400 text-xl">This board has no solution.</div>
+    )
+  }
+
   return (
     <>
       {solution && (
@@ -248,7 +215,7 @@ function SolutionWrapper({
             className={`text-slate-300 mb-4 text-xl initial-reveal ${revealDelays[0]}`}
             key={resetKey}
           >
-            Solution steps ({solution.length - 1})
+            Solution steps ({solution.length})
           </h3>
           <hr className="opacity-50" />
         </>
@@ -265,6 +232,7 @@ function SolutionWrapper({
             className="absolute pt-10 pb-20"
             solution={solution}
             size={size}
+            initialBoard={initialBoard}
           />
         )}
         {/* overlap blocks interaction with solution steps -- intentional: */}
@@ -278,25 +246,42 @@ function SolutionWrapper({
 function SolutionSteps({
   solution,
   size,
+  initialBoard,
   className = '',
 }: {
-  solution: BitBoard[]
+  solution: number[]
   size: BoardSize
+  initialBoard: BitBoard
   className?: string
 }) {
+  const stepBoards = useMemo(() => {
+    const boards: BitBoard[] = [initialBoard]
+    let workingBoard = initialBoard
+
+    for (let i = 0; i < solution.length; i++) {
+      workingBoard = togglePlus(
+        workingBoard,
+        size,
+        Math.floor(solution[i] / size),
+        solution[i] % size
+      )
+      boards.push(workingBoard)
+    }
+
+    console.log('setting board step list to:', boards)
+
+    return boards
+  }, [initialBoard, solution, size])
+  console.log('rendering solution', solution)
   return (
     <div className={className}>
       <div className="flex flex-wrap gap-8">
-        {solution.map((s, i) => {
-          const diff =
-            i < solution.length - 1 &&
-            stepDiff(solution[i], solution[i + 1], size)
-
+        {stepBoards.map((board: BitBoard, i) => {
           return (
             <div key={i}>
               <LightBoard
                 key={i}
-                board={s}
+                board={board}
                 size={size}
                 className={`mb-4 snap-center initial-reveal ${
                   revealDelays[
@@ -305,9 +290,11 @@ function SolutionSteps({
                       : revealDelays.length - 1
                   ]
                 }`}
-                tagRow={diff ? diff[0] : undefined}
-                tagCol={diff ? diff[1] : undefined}
-                tag={diff ? String(i + 1) : s === 0 ? 'Done!' : undefined}
+                tagRow={
+                  board === 0 ? undefined : Math.floor(solution[i] / size)
+                }
+                tagCol={board === 0 ? undefined : solution[i] % size}
+                tag={board === 0 ? 'Done!' : String(i + 1)}
               />
             </div>
           )
@@ -319,9 +306,9 @@ function SolutionSteps({
 
 function App() {
   const [workerThinking, setWorkerThinking] = useState(false)
-  const [solution, setSolution] = useState<BitBoard[] | undefined | null>([
-    6466819, 6466884, 6470784, 6325248, 7405568, 0,
-  ])
+  const [solution, setSolution] = useState<number[] | undefined | null>(
+    undefined
+  )
   const [solveWorker, setSolveWorker] = useState<Worker | null>(null)
 
   useEffect(() => {
@@ -335,24 +322,8 @@ function App() {
         return
       }
 
-      const newSolution: BitBoard[] = [e.data.originalBitBoard]
-      const size = Math.sqrt(e.data.solution.length) as BoardSize
-
-      for (let i = 0; i < e.data.solution.length; i++) {
-        if (e.data.solution[i]) {
-          newSolution.push(
-            togglePlus(
-              newSolution[newSolution.length - 1],
-              size,
-              Math.floor(i / size),
-              i % size
-            )
-          )
-        }
-      }
-
-      console.log('storing solution:', newSolution)
-      setSolution(newSolution)
+      setSolution(e.data.solution)
+      setSolvedBoard(e.data.originalBitBoard)
     }
 
     setSolveWorker(worker)
@@ -361,12 +332,13 @@ function App() {
   }, [])
 
   const [boardSize, setBoardSize] = useState<BoardSize>(5)
-  const [bitBoard, setBitBoard] = useState<BitBoard>(() => makeRandomBoard(boardSize))
+  const [bitBoard, setBitBoard] = useState<BitBoard>(() =>
+    makeRandomBoard(boardSize)
+  )
+  const [solvedBoard, setSolvedBoard] = useState<BitBoard>(() => bitBoard)
 
   const [inputMode, setInputMode] = useState(() => togglePlus)
 
-  const pressedStyle =
-    'bg-emerald-900 inset-shadow-sm inset-shadow-zinc-950 text-emerald-100/80 '
   const unpressedStyle =
     'bg-emerald-700 light-edge-shadow hover:bg-emerald-600 active:bg-emerald-800 active:text-emerald-100 active:inset-shadow-sm active:inset-shadow-zinc-950 '
   const unpressedSecondary =
@@ -527,7 +499,11 @@ function App() {
 
         {/* Solution section */}
         <div className="row-span-2">
-          {solution && <SolutionWrapper solution={solution} size={boardSize} />}
+          <SolutionWrapper
+            solution={solution}
+            size={boardSize}
+            initialBoard={solvedBoard}
+          />
         </div>
       </div>
     </div>
