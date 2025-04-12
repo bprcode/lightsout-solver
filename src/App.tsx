@@ -4,6 +4,14 @@ import linkedSelectionSvg from './assets/linked-selection.svg'
 import unlinkedSelectionSvg from './assets/unlinked-selection.svg'
 export type BoardSize = 2 | 3 | 4 | 5
 export type BitBoard = number
+export type SolveRequest = {
+  bitBoard: BitBoard
+  boardSize: BoardSize
+}
+export type SolveResponse = {
+  solution: number[]
+  originalBitBoard: BitBoard
+}
 
 export function togglePlus(
   board: BitBoard,
@@ -195,11 +203,11 @@ function SolutionWrapper({
   const resetKey = useMemo(() => (solution ? solution.join('') : 0), [solution])
 
   useEffect(() => {
-    if(scrollRef.current) {
-      scrollRef.current.scrollTo(0,0)
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo(0, 0)
     }
   }, [solution])
-  
+
   if (solution === undefined) {
     return <></>
   }
@@ -222,7 +230,10 @@ function SolutionWrapper({
           <hr className="opacity-50" />
         </>
       )}
-      <div ref={scrollRef} className={'overflow-y-auto relative h-full snap-y scroll-pt-8'}>
+      <div
+        ref={scrollRef}
+        className={'overflow-y-auto relative h-full snap-y scroll-pt-8'}
+      >
         {solution === null && (
           <h2 className="text-orange-300 text-2xl">
             This board cannot be solved.
@@ -312,11 +323,13 @@ function App() {
   const [solveWorker, setSolveWorker] = useState<Worker | null>(null)
 
   useEffect(() => {
-    const worker = new Worker(new URL('solve-worker-f2.ts', import.meta.url))
-    worker.onmessage = e => {
+    const worker = new Worker(new URL('solve-worker-f2.ts', import.meta.url), {
+      type: 'module',
+    })
+    worker.onmessage = (e: MessageEvent<SolveResponse | { error: string }>) => {
       setWorkerThinking(false)
 
-      if (e.data.error) {
+      if ('error' in e.data) {
         // Board was unsolvable.
         setSolution(null)
         return

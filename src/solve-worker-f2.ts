@@ -1,6 +1,7 @@
+import { SolveRequest, SolveResponse } from './App'
 type F2 = 0 | 1
 
-onmessage = e => {
+onmessage = (e:MessageEvent<SolveRequest>) => {
   const boardVector: F2[] = Array(e.data.boardSize ** 2)
   for (let i = 0; i < e.data.boardSize ** 2; i++) {
     boardVector[i] = e.data.bitBoard & (1 << i) ? 1 : 0
@@ -8,7 +9,7 @@ onmessage = e => {
 
   try {
     const solution = solveBoardVector(boardVector)
-    postMessage({ solution, originalBitBoard: e.data.bitBoard })
+    postMessage({ solution, originalBitBoard: e.data.bitBoard } as SolveResponse)
   } catch (error) {
     if (error instanceof Error) {
       postMessage({ error })
