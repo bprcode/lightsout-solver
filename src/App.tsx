@@ -368,7 +368,7 @@ function LinkedButton({
           width="5"
           height="5"
           stroke="#D9D9D9"
-          stroke-opacity="0.4"
+          strokeOpacity="0.4"
         />
         <rect
           x="17.5"
@@ -376,7 +376,7 @@ function LinkedButton({
           width="5"
           height="5"
           stroke="#D9D9D9"
-          stroke-opacity="0.4"
+          strokeOpacity="0.4"
         />
         <rect
           x="1.5"
@@ -392,7 +392,7 @@ function LinkedButton({
           width="5"
           height="5"
           stroke="#D9D9D9"
-          stroke-opacity="0.4"
+          strokeOpacity="0.4"
         />
         <rect
           x="1.5"
@@ -400,7 +400,7 @@ function LinkedButton({
           width="5"
           height="5"
           stroke="#D9D9D9"
-          stroke-opacity="0.4"
+          strokeOpacity="0.4"
         />
       </svg>
     </button>
@@ -437,7 +437,7 @@ function SingleButton({
           width="5"
           height="5"
           stroke="#D9D9D9"
-          stroke-opacity="0.4"
+          strokeOpacity="0.4"
         />
         <rect
           x="9.5"
@@ -445,7 +445,7 @@ function SingleButton({
           width="5"
           height="5"
           stroke="#D9D9D9"
-          stroke-opacity="0.4"
+          strokeOpacity="0.4"
         />
         <rect
           x="17.5"
@@ -453,7 +453,7 @@ function SingleButton({
           width="5"
           height="5"
           stroke="#D9D9D9"
-          stroke-opacity="0.4"
+          strokeOpacity="0.4"
         />
         <rect
           x="17.5"
@@ -461,7 +461,7 @@ function SingleButton({
           width="5"
           height="5"
           stroke="#D9D9D9"
-          stroke-opacity="0.4"
+          strokeOpacity="0.4"
         />
         <rect
           x="17.5"
@@ -469,7 +469,7 @@ function SingleButton({
           width="5"
           height="5"
           stroke="#D9D9D9"
-          stroke-opacity="0.4"
+          strokeOpacity="0.4"
         />
         <rect
           x="1.5"
@@ -477,7 +477,7 @@ function SingleButton({
           width="5"
           height="5"
           stroke="#D9D9D9"
-          stroke-opacity="0.4"
+          strokeOpacity="0.4"
         />
         <rect
           x="1.5"
@@ -485,7 +485,7 @@ function SingleButton({
           width="5"
           height="5"
           stroke="#D9D9D9"
-          stroke-opacity="0.4"
+          strokeOpacity="0.4"
         />
         <rect
           x="1.5"
@@ -493,7 +493,7 @@ function SingleButton({
           width="5"
           height="5"
           stroke="#D9D9D9"
-          stroke-opacity="0.4"
+          strokeOpacity="0.4"
         />
       </svg>
     </button>
@@ -591,13 +591,13 @@ function App() {
     'px-3 py-1 rounded-lg font-semibold h-10 relative flex justify-center items-center shrink-0 '
 
   return (
-    <div className="max-w-4xl mx-auto mt-8 bg-zinc-800 text-slate-200 p-4 light-edge min-h-[calc(100svh-8rem)]">
-      <h1 className="text-slate-300 font-bold mb-6 text-3xl">
-        <em>Lights Out</em> Solver
+    <div className="max-w-4xl mx-auto mt-8 bg-zinc-800 text-slate-200 p-4 light-edge min-h-[calc(100svh-8rem)] outfit-font">
+      <h1 className="text-slate-300 mb-6 text-3xl font-semibold tracking-[0.01em]">
+        <em>Lights Out</em> solver
       </h1>
 
-      <div className="grid  grid-flow-col grid-cols-[max-content_1fr] grid-rows-[min-content_1fr] gap-x-8">
-        <section className="text-slate-200 prose mb-10">
+      <div className="grid grid-flow-col grid-cols-[max-content_1fr] grid-rows-[min-content_1fr] gap-x-8">
+        <section className="text-slate-200 prose mb-10 max-w-xl">
           <p>
             <em>Lights Out</em> is a classic puzzle game in which the player
             tries to switch off every light on the board. Whenever one light is

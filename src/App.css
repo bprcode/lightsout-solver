@@ -16,6 +16,13 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.outfit-font {
+  font-family: "Outfit", 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 300;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+
 @utility d {
   outline: 1px solid orange;
 }
