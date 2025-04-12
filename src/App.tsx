@@ -691,7 +691,7 @@ function App() {
                         : `text-zinc-300`
                     }
                   >
-                    Select linked
+                    Toggle linked
                   </label>
                 </div>
                 <div className="flex items-center">
@@ -712,7 +712,7 @@ function App() {
                         : `text-zinc-300`
                     }
                   >
-                    Select single
+                    Edit puzzle
                   </label>
                 </div>
               </fieldset>
