@@ -8,9 +8,16 @@ onmessage = (e: MessageEvent<SolveRequest>) => {
   }
 
   try {
-    const solution = solveBoardVector(boardVector)
+    const solutions = solveBoardVector(boardVector)
+    const bestSolution = solutions.reduce(
+      (previous, current) =>
+        current.length < previous.length ? current : previous,
+      solutions[0]
+    )
+
     postMessage({
-      solution,
+      solutions,
+      bestSolution,
       originalBitBoard: e.data.bitBoard,
     } as SolveResponse)
   } catch (error) {
@@ -78,7 +85,7 @@ function substituteFreeVariables(
   return solution
 }
 
-function solveBoardVector(vector: F2[]) {
+function solveBoardVector(vector: F2[]): number[][] {
   if (![4, 9, 16, 25].includes(vector.length)) {
     throw new Error('Board state must be a supported length.')
   }
@@ -106,16 +113,7 @@ function solveBoardVector(vector: F2[]) {
     solutions.push(outcome)
   }
 
-  console.log('Found', solutions.length, 'solutions:')
-  for (const soln of solutions) {
-    console.log(soln.join(', ') + `\t(${soln.length} steps)`)
-  }
-  const best = solutions.reduce(
-    (prior, current) => (current.length < prior.length ? current : prior),
-    solutions[0]
-  )
-  console.log('the shortest solution was:', best)
-  return best
+  return solutions
 
   function isConsistent(reduced: F2[][]) {
     for (let i = reduced.length - 1; i >= 0; i--) {

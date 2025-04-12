@@ -9,7 +9,8 @@ export type SolveRequest = {
   boardSize: BoardSize
 }
 export type SolveResponse = {
-  solution: number[]
+  solutions: number[][]
+  bestSolution: number[]
   originalBitBoard: BitBoard
 }
 
@@ -335,7 +336,8 @@ function App() {
         return
       }
 
-      setSolution(e.data.solution)
+      console.log('received solutions:', e.data.solutions)
+      setSolution(e.data.bestSolution)
       setSolvedBoard(e.data.originalBitBoard)
     }
 
