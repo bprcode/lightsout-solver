@@ -1,7 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import './App.css'
-import linkedSelectionSvg from './assets/linked-selection.svg'
-import unlinkedSelectionSvg from './assets/unlinked-selection.svg'
 export type BoardSize = 2 | 3 | 4 | 5
 export type BitBoard = number
 export type SolveRequest = {
@@ -316,6 +314,233 @@ function SolutionSteps({
   )
 }
 
+function LinkedButton({
+  onClick,
+  className = '',
+}: {
+  onClick: () => void
+  className: string
+}) {
+  return (
+    <button id="linkedSwitch" className={className} onClick={onClick}>
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <rect
+          x="9.5"
+          y="9.5"
+          width="5"
+          height="5"
+          fill="currentColor"
+          stroke="#D9D9D9"
+        />
+        <rect
+          x="9.5"
+          y="1.5"
+          width="5"
+          height="5"
+          fill="currentColor"
+          stroke="#D9D9D9"
+        />
+        <rect
+          x="9.5"
+          y="17.5"
+          width="5"
+          height="5"
+          fill="currentColor"
+          stroke="#D9D9D9"
+        />
+        <rect
+          x="17.5"
+          y="9.5"
+          width="5"
+          height="5"
+          fill="currentColor"
+          stroke="#D9D9D9"
+        />
+        <rect
+          x="17.5"
+          y="1.5"
+          width="5"
+          height="5"
+          stroke="#D9D9D9"
+          stroke-opacity="0.4"
+        />
+        <rect
+          x="17.5"
+          y="17.5"
+          width="5"
+          height="5"
+          stroke="#D9D9D9"
+          stroke-opacity="0.4"
+        />
+        <rect
+          x="1.5"
+          y="9.5"
+          width="5"
+          height="5"
+          fill="currentColor"
+          stroke="#D9D9D9"
+        />
+        <rect
+          x="1.5"
+          y="1.5"
+          width="5"
+          height="5"
+          stroke="#D9D9D9"
+          stroke-opacity="0.4"
+        />
+        <rect
+          x="1.5"
+          y="17.5"
+          width="5"
+          height="5"
+          stroke="#D9D9D9"
+          stroke-opacity="0.4"
+        />
+      </svg>
+    </button>
+  )
+}
+
+function SingleButton({
+  onClick,
+  className = '',
+}: {
+  onClick: () => void
+  className: string
+}) {
+  return (
+    <button id="singleSwitch" className={className} onClick={onClick}>
+      <svg
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <rect
+          x="9.5"
+          y="9.5"
+          width="5"
+          height="5"
+          fill="currentColor"
+          stroke="#D9D9D9"
+        />
+        <rect
+          x="9.5"
+          y="1.5"
+          width="5"
+          height="5"
+          stroke="#D9D9D9"
+          stroke-opacity="0.4"
+        />
+        <rect
+          x="9.5"
+          y="17.5"
+          width="5"
+          height="5"
+          stroke="#D9D9D9"
+          stroke-opacity="0.4"
+        />
+        <rect
+          x="17.5"
+          y="9.5"
+          width="5"
+          height="5"
+          stroke="#D9D9D9"
+          stroke-opacity="0.4"
+        />
+        <rect
+          x="17.5"
+          y="1.5"
+          width="5"
+          height="5"
+          stroke="#D9D9D9"
+          stroke-opacity="0.4"
+        />
+        <rect
+          x="17.5"
+          y="17.5"
+          width="5"
+          height="5"
+          stroke="#D9D9D9"
+          stroke-opacity="0.4"
+        />
+        <rect
+          x="1.5"
+          y="9.5"
+          width="5"
+          height="5"
+          stroke="#D9D9D9"
+          stroke-opacity="0.4"
+        />
+        <rect
+          x="1.5"
+          y="1.5"
+          width="5"
+          height="5"
+          stroke="#D9D9D9"
+          stroke-opacity="0.4"
+        />
+        <rect
+          x="1.5"
+          y="17.5"
+          width="5"
+          height="5"
+          stroke="#D9D9D9"
+          stroke-opacity="0.4"
+        />
+      </svg>
+    </button>
+  )
+}
+
+function RandomButton({
+  onClick,
+  className = '',
+}: {
+  onClick: () => void
+  className: string
+}) {
+  return (
+    <button className={className} onClick={onClick}>
+      <svg
+        className="text-zinc-300 mr-3"
+        width="20"
+        height="25"
+        viewBox="0 0 20 25"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M10 24L18.5547 18.2969C18.8329 18.1114 19 17.7992 19 17.4648V7M10 24L1.4453 18.2969C1.1671 18.1114 1 17.7992 1 17.4648V7M10 24V13M19 7L10.5547 1.3698C10.2188 1.14587 9.7812 1.14587 9.4453 1.3698L1 7M19 7L10 13M1 7L10 13"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinejoin="bevel"
+        />
+        <path
+          d="M6.65562 16.235C6.65562 17.0634 6.18496 17.3158 5.53996 16.8625C4.89497 16.4093 4.40686 15.5468 4.40686 14.7184C4.40686 13.8899 4.89495 13.7945 5.52253 14.1954C6.15011 14.5963 6.65562 15.4065 6.65562 16.235Z"
+          fill="currentColor"
+        />
+        <path
+          d="M12.1807 18.1432C12.1807 18.9716 12.6514 19.224 13.2964 18.7708C13.9414 18.3175 14.4295 17.455 14.4295 16.6266C14.4295 15.7982 13.9414 15.7027 13.3138 16.1036C12.6863 16.5046 12.1807 17.3148 12.1807 18.1432Z"
+          fill="currentColor"
+        />
+        <path
+          d="M14.651 13.6285C14.651 14.4569 15.1216 14.7093 15.7666 14.256C16.4116 13.8028 16.8997 12.9403 16.8997 12.1119C16.8997 11.2834 16.4116 11.188 15.784 11.5889C15.1565 11.9898 14.651 12.8 14.651 13.6285Z"
+          fill="currentColor"
+        />
+      </svg>
+      Random
+    </button>
+  )
+}
+
 function App() {
   const [workerThinking, setWorkerThinking] = useState(false)
   const [solution, setSolution] = useState<number[] | undefined | null>(
@@ -388,7 +613,7 @@ function App() {
         {/* Main lightboard */}
         <main className="flex flex-col items-start shrink-0 ml-8">
           <div className="flex gap-8">
-            <div>
+            <div className="flex flex-col justify-between">
               <LightBoard
                 className="mb-4"
                 board={bitBoard}
@@ -417,97 +642,80 @@ function App() {
               </div>
             </div>
 
-            <div className="flex flex-col w-fit items-start gap-8">
-              <select
-                className="bg-zinc-700 px-4 py-2 light-edge h-fit w-30"
-                value={boardSize}
-                onChange={e => {
-                  setBoardSize(Number(e.target.value) as BoardSize)
-                  setBitBoard(
-                    makeRandomBoard(Number(e.target.value) as BoardSize)
-                  )
-                  setSolution(undefined)
-                }}
-              >
-                <option value="2">2x2</option>
-                <option value="3">3x3</option>
-                <option value="4">4x4</option>
-                <option value="5">5x5</option>
-              </select>
-
-              <div className="flex flex-col">
-                Linked
-                <button
-                  className={`${
-                    inputMode === togglePlus
-                      ? grayPressedStyle
-                      : grayUnpressedStyle
-                  } ${baseButtonStyle} rounded-br-none rounded-bl-none`}
-                  onClick={() => {
-                    setInputMode(() => togglePlus)
+            <div className="flex flex-col w-fit items-start">
+              <div className="flex gap-4">
+                <select
+                  className="bg-zinc-700 hover:bg-zinc-600 px-4 py-2 light-edge h-fit mb-4"
+                  value={boardSize}
+                  onChange={e => {
+                    setBoardSize(Number(e.target.value) as BoardSize)
+                    setBitBoard(
+                      makeRandomBoard(Number(e.target.value) as BoardSize)
+                    )
+                    setSolution(undefined)
                   }}
                 >
-                  <img
-                    src={linkedSelectionSvg}
-                    className={`mr-3 ${
-                      inputMode === toggleSingle ? 'opacity-65' : 'opacity-90'
-                    }`}
-                  />
-                </button>
-                <button
-                  className={`${
-                    inputMode === toggleSingle
-                      ? grayPressedStyle
-                      : grayUnpressedStyle
-                  } ${baseButtonStyle} rounded-tl-none rounded-tr-none`}
-                  onClick={() => setInputMode(() => toggleSingle)}
-                >
-                  <img
-                    src={unlinkedSelectionSvg}
-                    className={`mr-3 ${
-                      inputMode === toggleSingle ? 'opacity-100' : 'opacity-70'
-                    }`}
-                  />
-                </button>
-                Single
+                  <option value="2">2x2</option>
+                  <option value="3">3x3</option>
+                  <option value="4">4x4</option>
+                  <option value="5">5x5</option>
+                </select>
+
+                <RandomButton
+                  className={baseButtonStyle + unpressedSecondary}
+                  onClick={() => {
+                    setSolution(undefined)
+                    setBitBoard(makeRandomBoard(boardSize))
+                  }}
+                />
               </div>
 
-              <button
-                className={baseButtonStyle + unpressedSecondary}
-                onClick={() => {
-                  setSolution(undefined)
-                  setBitBoard(makeRandomBoard(boardSize))
-                }}
-              >
-                <svg
-                  className="text-zinc-300 mr-3"
-                  width="20"
-                  height="25"
-                  viewBox="0 0 20 25"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M10 24L18.5547 18.2969C18.8329 18.1114 19 17.7992 19 17.4648V7M10 24L1.4453 18.2969C1.1671 18.1114 1 17.7992 1 17.4648V7M10 24V13M19 7L10.5547 1.3698C10.2188 1.14587 9.7812 1.14587 9.4453 1.3698L1 7M19 7L10 13M1 7L10 13"
-                    stroke="currentColor"
-                    strokeWidth="1.5"
-                    strokeLinejoin="bevel"
+              <fieldset className="border-1 border-zinc-600 p-4 rounded-md w-full">
+                <div className="flex items-center">
+                  <LinkedButton
+                    className={`${
+                      inputMode === togglePlus
+                        ? grayPressedStyle + ' text-emerald-200/90'
+                        : grayUnpressedStyle + ' '
+                    } ${baseButtonStyle} rounded-br-none rounded-bl-none mr-4 inline`}
+                    onClick={() => {
+                      setInputMode(() => togglePlus)
+                    }}
                   />
-                  <path
-                    d="M6.65562 16.235C6.65562 17.0634 6.18496 17.3158 5.53996 16.8625C4.89497 16.4093 4.40686 15.5468 4.40686 14.7184C4.40686 13.8899 4.89495 13.7945 5.52253 14.1954C6.15011 14.5963 6.65562 15.4065 6.65562 16.235Z"
-                    fill="currentColor"
+
+                  <label
+                    htmlFor="linkedSwitch"
+                    className={
+                      inputMode === togglePlus
+                        ? `text-emerald-200`
+                        : `text-zinc-300`
+                    }
+                  >
+                    Select linked
+                  </label>
+                </div>
+                <div className="flex items-center">
+                  <SingleButton
+                    className={`${
+                      inputMode === toggleSingle
+                        ? grayPressedStyle + ' text-emerald-200/90'
+                        : grayUnpressedStyle
+                    } ${baseButtonStyle} rounded-tl-none rounded-tr-none mr-4 inline`}
+                    onClick={() => setInputMode(() => toggleSingle)}
                   />
-                  <path
-                    d="M12.1807 18.1432C12.1807 18.9716 12.6514 19.224 13.2964 18.7708C13.9414 18.3175 14.4295 17.455 14.4295 16.6266C14.4295 15.7982 13.9414 15.7027 13.3138 16.1036C12.6863 16.5046 12.1807 17.3148 12.1807 18.1432Z"
-                    fill="currentColor"
-                  />
-                  <path
-                    d="M14.651 13.6285C14.651 14.4569 15.1216 14.7093 15.7666 14.256C16.4116 13.8028 16.8997 12.9403 16.8997 12.1119C16.8997 11.2834 16.4116 11.188 15.784 11.5889C15.1565 11.9898 14.651 12.8 14.651 13.6285Z"
-                    fill="currentColor"
-                  />
-                </svg>
-                Random
-              </button>
+
+                  <label
+                    htmlFor="singleSwitch"
+                    className={
+                      inputMode === toggleSingle
+                        ? `text-emerald-200`
+                        : `text-zinc-300`
+                    }
+                  >
+                    Select single
+                  </label>
+                </div>
+              </fieldset>
             </div>
           </div>
         </main>
