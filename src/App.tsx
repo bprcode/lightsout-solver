@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import './App.css'
 import linkedSelectionSvg from './assets/linked-selection.svg'
 import unlinkedSelectionSvg from './assets/unlinked-selection.svg'
@@ -36,14 +36,9 @@ export function toggleSingle(
 }
 
 function makeRandomBoard(size: BoardSize) {
-  console.log('generating random board:')
   let board = 0
   for (let i = 0; i < 7; i++) {
     const position = Math.floor(Math.random() * size ** 2)
-    console.log(i + 1, '\ttoggling', [
-      Math.floor(position / size),
-      position % size,
-    ])
     board = togglePlus(
       board,
       size,
@@ -196,8 +191,15 @@ function SolutionWrapper({
   initialBoard: BitBoard
   size: BoardSize
 }) {
+  const scrollRef = useRef<HTMLDivElement | null>(null)
   const resetKey = useMemo(() => (solution ? solution.join('') : 0), [solution])
 
+  useEffect(() => {
+    if(scrollRef.current) {
+      scrollRef.current.scrollTo(0,0)
+    }
+  }, [solution])
+  
   if (solution === undefined) {
     return <></>
   }
@@ -220,7 +222,7 @@ function SolutionWrapper({
           <hr className="opacity-50" />
         </>
       )}
-      <div className="overflow-y-auto relative h-full snap-y">
+      <div ref={scrollRef} className={'overflow-y-auto relative h-full snap-y scroll-pt-8'}>
         {solution === null && (
           <h2 className="text-orange-300 text-2xl">
             This board cannot be solved.
@@ -268,22 +270,20 @@ function SolutionSteps({
       boards.push(workingBoard)
     }
 
-    console.log('setting board step list to:', boards)
-
     return boards
   }, [initialBoard, solution, size])
-  console.log('rendering solution', solution)
+
   return (
     <div className={className}>
       <div className="flex flex-wrap gap-8">
         {stepBoards.map((board: BitBoard, i) => {
           return (
-            <div key={i}>
+            <div key={i} className="snap-start">
               <LightBoard
                 key={i}
                 board={board}
                 size={size}
-                className={`mb-4 snap-center initial-reveal ${
+                className={`mb-4 initial-reveal ${
                   revealDelays[
                     i + 1 < revealDelays.length
                       ? i + 1

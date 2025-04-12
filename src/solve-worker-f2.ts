@@ -91,23 +91,13 @@ function solveBoardVector(vector: F2[]) {
     throw new Error('Board has no solution.')
   }
 
-  // DEBUG
-  for (let i = 0; i < matrix.length; i++) {
-    console.log(i, '\t', matrix[i].map(x => (x ? '🟦' : '⬛')).join(''))
-  }
-
   const solutions: number[][] = []
   const freeVariables = getFreeVariables(matrix)
-  console.log('free variable list?', freeVariables)
   for (let v = 0; v < 2 ** freeVariables.length; v++) {
     const substitutions = freeVariables.map(
       (free, i) => [free, v & (1 << i) ? 1 : 0] as [number, F2]
     )
-    console.log(
-      'substituting:',
-      ...substitutions.map(([pos, val]) => `${pos} <- ${val}\t`)
-    )
-    // next: generate a solution from each free variable selection...
+    
     const outcome = substituteFreeVariables(matrix, substitutions)
     solutions.push(outcome)
   }
