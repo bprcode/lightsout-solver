@@ -53,6 +53,7 @@ function substituteFreeVariables(
 ): number[] {
   const clone = structuredClone(rref)
 
+  // Apply each given variable before solving the system:
   for (const sub of substitutions) {
     for (let i = 0; i < rref.length; i++) {
       clone[i][sub[0]] = clone[i][sub[0]] && sub[1]
@@ -62,22 +63,27 @@ function substituteFreeVariables(
   const particularSolution: F2[] = Array(clone.length).fill(0)
 
   for (let i = 0; i < clone.length; i++) {
-    let flips = clone[i][clone[i].length - 1]
-    for (let j = clone[i].length - 2; j >= 0; j--) {
+    let flips = 0
+    for (let j = clone[i].length - 1; j >= 0; j--) {
       flips += clone[i][j]
     }
+    // Skip empty rows:
     if (flips === 0) {
       continue
     }
+
+    // Solve each row based on its parity:
     particularSolution[i] = ((flips - 1) % 2) as F2
   }
 
-  for (const numf of substitutions) {
-    if (numf[1]) {
-      particularSolution[numf[0]] = 1
+  // Given variables count toward the solution, too:
+  for (const sub of substitutions) {
+    if (sub[1]) {
+      particularSolution[sub[0]] = 1
     }
   }
 
+  // List the indices of nonzero variables:
   const solution = particularSolution
     .map((v, i) => (v ? i : -1))
     .filter(x => x !== -1)
@@ -104,9 +110,9 @@ function solveBoardVector(vector: F2[]): number[][] {
 
   const solutions: number[][] = []
   const freeVariables = getFreeVariables(matrix)
-  for (let v = 0; v < 2 ** freeVariables.length; v++) {
+  for (let bitVector = 0; bitVector < 2 ** freeVariables.length; bitVector++) {
     const substitutions = freeVariables.map(
-      (free, i) => [free, v & (1 << i) ? 1 : 0] as [number, F2]
+      (freeIndex, i) => [freeIndex, bitVector & (1 << i) ? 1 : 0] as [number, F2]
     )
 
     const outcome = substituteFreeVariables(matrix, substitutions)
