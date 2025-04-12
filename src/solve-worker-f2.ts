@@ -1,7 +1,7 @@
 import { SolveRequest, SolveResponse } from './App'
 type F2 = 0 | 1
 
-onmessage = (e:MessageEvent<SolveRequest>) => {
+onmessage = (e: MessageEvent<SolveRequest>) => {
   const boardVector: F2[] = Array(e.data.boardSize ** 2)
   for (let i = 0; i < e.data.boardSize ** 2; i++) {
     boardVector[i] = e.data.bitBoard & (1 << i) ? 1 : 0
@@ -9,7 +9,10 @@ onmessage = (e:MessageEvent<SolveRequest>) => {
 
   try {
     const solution = solveBoardVector(boardVector)
-    postMessage({ solution, originalBitBoard: e.data.bitBoard } as SolveResponse)
+    postMessage({
+      solution,
+      originalBitBoard: e.data.bitBoard,
+    } as SolveResponse)
   } catch (error) {
     if (error instanceof Error) {
       postMessage({ error })
@@ -98,7 +101,7 @@ function solveBoardVector(vector: F2[]) {
     const substitutions = freeVariables.map(
       (free, i) => [free, v & (1 << i) ? 1 : 0] as [number, F2]
     )
-    
+
     const outcome = substituteFreeVariables(matrix, substitutions)
     solutions.push(outcome)
   }
@@ -152,13 +155,27 @@ function getLogicMatrix(dimension: number): F2[][] {
 }
 
 function rrefOverF2(matrix: F2[][]) {
-  arrangePivots()
+  reduceSubmatrix(0, 0)
 
-  for (let i = 0; i < matrix.length; i++) {
-    for (let j = 0; j < matrix[0].length; j++) {
-      if (matrix[i][j] !== 0) {
-        clearAbove(i, j)
-        break
+  function reduceSubmatrix(iFrom: number, jFrom: number) {
+    for (let j = jFrom; j < matrix[0].length; j++) {
+      for (let i = iFrom; i < matrix.length; i++) {
+        if (matrix[i][j] !== 0) {
+          const swap = matrix[iFrom]
+          matrix[iFrom] = matrix[i]
+          matrix[i] = swap
+          clearPivotColumn(iFrom, j)
+          reduceSubmatrix(iFrom + 1, j + 1)
+          return
+        }
+      }
+    }
+  }
+
+  function clearPivotColumn(i: number, j: number) {
+    for (let iPrime = 0; iPrime < matrix.length; iPrime++) {
+      if (iPrime !== i && matrix[iPrime][j]) {
+        addRowFromTo(i, iPrime)
       }
     }
   }
@@ -167,37 +184,6 @@ function rrefOverF2(matrix: F2[][]) {
     for (let j = 0; j < matrix[0].length; j++) {
       matrix[targetRow][j] = ((matrix[sourceRow][j] + matrix[targetRow][j]) %
         2) as F2
-    }
-  }
-
-  function clearBelow(i: number, j: number) {
-    for (let iPrime = i + 1; iPrime < matrix.length; iPrime++) {
-      if (matrix[iPrime][j] !== 0) {
-        addRowFromTo(i, iPrime)
-      }
-    }
-  }
-
-  function clearAbove(i: number, j: number) {
-    for (let iPrime = i - 1; iPrime >= 0; iPrime--) {
-      if (matrix[iPrime][j] !== 0) {
-        addRowFromTo(i, iPrime)
-      }
-    }
-  }
-
-  function arrangePivots(iFrom = 0, jFrom = 0) {
-    for (let j = jFrom; j < matrix[0].length; j++) {
-      for (let i = iFrom; i < matrix.length; i++) {
-        if (matrix[i][j] !== 0) {
-          const swap = matrix[iFrom]
-          matrix[iFrom] = matrix[i]
-          matrix[i] = swap
-          clearBelow(iFrom, j)
-          arrangePivots(iFrom + 1, j + 1)
-          return
-        }
-      }
     }
   }
 }
