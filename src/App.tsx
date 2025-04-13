@@ -510,7 +510,7 @@ function RandomButton({
   return (
     <button className={className} onClick={onClick}>
       <svg
-        className="text-zinc-300 mr-3"
+        className="text-slate-300 mr-3 group-hover:text-zinc-200"
         width="20"
         height="25"
         viewBox="0 0 20 25"
@@ -561,7 +561,6 @@ function App() {
         return
       }
 
-      console.log('received solutions:', e.data.solutions)
       setSolution(e.data.bestSolution)
       setSolvedBoard(e.data.originalBitBoard)
     }
@@ -579,14 +578,14 @@ function App() {
 
   const [inputMode, setInputMode] = useState(() => togglePlus)
 
-  const unpressedStyle =
-    'bg-emerald-700 light-edge-shadow hover:bg-emerald-600 active:bg-emerald-800 active:text-emerald-100 active:inset-shadow-sm active:inset-shadow-zinc-950 '
+  const solveButtonStyle =
+    'bg-emerald-700 emerald-edge-shadow hover:bg-emerald-600 active:bg-emerald-800 hover:text-zinc-100 active:text-emerald-100 active:inset-shadow-sm active:inset-shadow-zinc-950 '
   const unpressedSecondary =
-    'raised-gray text-zinc-200 light-edge-faint-shadow hover:bg-zinc-600 active:bg-zinc-800 active:text-zinc-100 active:inset-shadow-sm active:inset-shadow-zinc-950 '
+    'group raised-gray text-slate-200 light-edge-faint-shadow hover:bg-zinc-600 hover:text-zinc-200 active:bg-zinc-800 active:text-zinc-100 active:inset-shadow-sm active:inset-shadow-slate-950 '
   const grayPressedStyle =
     'bg-zinc-800 inset-shadow-sm inset-shadow-zinc-950 text-emerald-100/90 '
   const grayUnpressedStyle =
-    'raised-gray text-zinc-200 light-edge-faint-shadow hover:bg-zinc-600 active:bg-zinc-800 active:text-zinc-100 active:inset-shadow-sm active:inset-shadow-zinc-950 '
+    'raised-gray text-slate-200 light-edge-faint-shadow hover:bg-zinc-600 active:bg-zinc-800 active:text-slate-100 active:inset-shadow-sm active:inset-shadow-slate-950 '
   const baseButtonStyle =
     'px-3 py-1 rounded-lg font-medium h-10 relative flex justify-center items-center shrink-0 cursor-pointer '
 
@@ -595,7 +594,7 @@ function App() {
       <div className="fixed top-0 transform -translate-x-1/2 translate-y-[-11rem] blur-md opacity-45">
         <img src={backgroundDiamonds} className={`w-[100%] opacity-40`} />
       </div>
-    <div className="contain-paint relative mt-8 bg-[hsl(235,9%,21%)] text-slate-200 px-4 pt-4 pb-1 thin-edge min-h-[calc(100svh-8rem)] outfit-font flex flex-col">
+    <div className="contain-paint relative my-8 bg-[hsl(235,9%,21%)] text-slate-200 px-4 pt-4 pb-1 thin-edge min-h-[calc(100svh-8rem)] outfit-font flex flex-col">
       <div className="absolute -right-[14rem] -bottom-[14rem]">
         <img src={diamondEmboss} className={`w-[38rem] opacity-78`} />
       </div>
@@ -637,7 +636,7 @@ function App() {
               <div className="flex gap-4 mb-4">
                 <button
                   disabled={workerThinking}
-                  className={unpressedStyle + baseButtonStyle + 'grow'}
+                  className={solveButtonStyle + baseButtonStyle + 'grow'}
                   onClick={() => {
                     setWorkerThinking(true)
                     setSolution(undefined)
@@ -695,7 +694,7 @@ function App() {
                     className={
                       inputMode === togglePlus
                         ? `text-emerald-200`
-                        : `text-zinc-300`
+                        : `text-slate-200 hover:text-zinc-100 cursor-pointer`
                     }
                   >
                     Toggle linked
@@ -716,7 +715,7 @@ function App() {
                     className={
                       inputMode === toggleSingle
                         ? `text-emerald-200`
-                        : `text-zinc-300`
+                        : `text-slate-200 hover:text-zinc-100 cursor-pointer`
                     }
                   >
                     Edit puzzle
