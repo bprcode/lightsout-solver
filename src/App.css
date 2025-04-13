@@ -21,7 +21,7 @@ body {
 }
 
 .outfit-font {
-  font-family: "Outfit", 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Outfit', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-weight: 300;
   font-optical-sizing: auto;
   font-style: normal;
@@ -40,7 +40,7 @@ body {
 }
 
 @utility raised-gray {
-  background-color: hsl(225,11%,28%);
+  background-color: hsl(225, 11%, 28%);
 }
 
 @utility illuminated {
@@ -239,10 +239,10 @@ body {
 }
 
 @utility thin-edge {
-  border-top: 2px solid hsl(225,11%,32%);
-  border-left: 2px solid hsl(225,11%,31%);
-  border-right: 2px solid hsl(245,11%,14%);
-  border-bottom: 2px solid hsl(245,20%,16%);
+  border-top: 2px solid hsl(225, 11%, 32%);
+  border-left: 2px solid hsl(225, 11%, 31%);
+  border-right: 2px solid hsl(245, 11%, 14%);
+  border-bottom: 2px solid hsl(245, 20%, 16%);
 }
 
 @utility light-edge {
@@ -267,4 +267,13 @@ body {
 
 @utility dark-edge {
   box-shadow: inset 1px 0 0 #0008, inset 0 1px 0 #000a;
+}
+
+@utility wide-template {
+  grid-template-areas:
+    'text text solution'
+    'board controls solution';
+
+  grid-template-columns: min-content min-content minmax(0, 1fr);
+  grid-template-rows: min-content minmax(0, 1fr);
 }
