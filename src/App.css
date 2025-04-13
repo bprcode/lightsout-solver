@@ -32,6 +32,10 @@
   outline-offset: 4px;
 }
 
+@utility raised-gray {
+  background-color: hsl(225,11%,28%);
+}
+
 @utility illuminated {
   box-shadow: inset 1px 0 0 rgb(0, 225, 180), inset 0 1px 0 rgb(30, 255, 191);
   background-image: radial-gradient(
@@ -220,6 +224,10 @@
 
 @utility light-edge-shadow {
   box-shadow: inset 1px 0 0 #fff3, inset 0 1px 0 #fff4, 1px 2px 3px #0008;
+}
+
+@utility light-edge-faint-shadow {
+  box-shadow: inset 1px 0 0 #fff3, inset 0 1px 0 #fff4, 2px 2px 3px #0004;
 }
 
 @utility dark-edge {

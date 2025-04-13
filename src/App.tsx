@@ -167,7 +167,7 @@ function LightBoard({
   return (
     <div
       className={
-        `bg-[hsl(230,10%,25%)] grid ${gridCols} w-fit p-4 light-edge auto-rows-[2.5rem] relative ` +
+        `raised-gray grid ${gridCols} w-fit p-4 light-edge-faint-shadow auto-rows-[2.5rem] relative ` +
         className
       }
     >
@@ -583,16 +583,16 @@ function App() {
   const unpressedStyle =
     'bg-emerald-700 light-edge-shadow hover:bg-emerald-600 active:bg-emerald-800 active:text-emerald-100 active:inset-shadow-sm active:inset-shadow-zinc-950 '
   const unpressedSecondary =
-    'bg-zinc-700 text-zinc-200 light-edge-shadow hover:bg-zinc-600 active:bg-zinc-800 active:text-zinc-100 active:inset-shadow-sm active:inset-shadow-zinc-950 '
+    'raised-gray text-zinc-200 light-edge-faint-shadow hover:bg-zinc-600 active:bg-zinc-800 active:text-zinc-100 active:inset-shadow-sm active:inset-shadow-zinc-950 '
   const grayPressedStyle =
     'bg-zinc-800 inset-shadow-sm inset-shadow-zinc-950 text-emerald-100/90 '
   const grayUnpressedStyle =
-    'bg-zinc-700 text-zinc-200 light-edge-shadow hover:bg-zinc-600 active:bg-zinc-800 active:text-zinc-100 active:inset-shadow-sm active:inset-shadow-zinc-950 '
+    'raised-gray text-zinc-200 light-edge-faint-shadow hover:bg-zinc-600 active:bg-zinc-800 active:text-zinc-100 active:inset-shadow-sm active:inset-shadow-zinc-950 '
   const baseButtonStyle =
     'px-3 py-1 rounded-lg font-medium h-10 relative flex justify-center items-center shrink-0 '
 
   return (
-    <div className="max-w-4xl mx-auto mt-8 bg-[hsl(240,9%,20%)] text-slate-200 p-4 light-edge min-h-[calc(100svh-8rem)] outfit-font relative contain-paint">
+    <div className="max-w-4xl mx-auto mt-8 bg-[hsl(235,9%,21%)] text-slate-200 p-4 light-edge min-h-[calc(100svh-8rem)] outfit-font relative contain-paint">
       <div className="absolute -right-[14rem] -bottom-[14rem]">
         <img src={diamondEmboss} className={`w-[38rem] opacity-80`} />
       </div>
@@ -649,7 +649,7 @@ function App() {
             <div className="flex flex-col w-fit items-start">
               <div className="flex gap-4">
                 <select
-                  className="outline-0 px-4 py-2 light-edge h-fit mb-4 font-medium bg-zinc-700 hover:bg-zinc-600"
+                  className="outline-0 px-4 py-2 light-edge-faint-shadow h-fit mb-4 font-medium raised-gray hover:bg-zinc-600"
                   value={boardSize}
                   onChange={e => {
                     setBoardSize(Number(e.target.value) as BoardSize)
@@ -674,7 +674,7 @@ function App() {
                 />
               </div>
 
-              <fieldset className="border-1 border-zinc-600 p-4 rounded-md w-full">
+              <fieldset className="outline-1 outline-zinc-600 p-4 rounded-md w-full">
                 <div className="flex items-center">
                   <LinkedButton
                     className={`${
