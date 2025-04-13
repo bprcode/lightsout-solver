@@ -591,11 +591,11 @@ function App() {
     'px-3 py-1 rounded-lg font-medium h-10 relative flex justify-center items-center shrink-0 cursor-pointer '
 
   return (
-    <>
-      <div className="fixed -top-[14rem] left-1/2 transform translate-x-[-52vw] blur-lg opacity-45">
-        <img src={backgroundDiamonds} className={`w-[50rem] opacity-40`} />
+    <div className="max-w-4xl mx-auto relative">
+      <div className="fixed top-0 transform -translate-x-1/2 translate-y-[-11rem] blur-md opacity-45">
+        <img src={backgroundDiamonds} className={`w-[100%] opacity-40`} />
       </div>
-    <div className="max-w-4xl mx-auto mt-8 bg-[hsl(235,9%,21%)] text-slate-200 px-4 pt-4 pb-1 light-edge min-h-[calc(100svh-8rem)] outfit-font relative contain-paint flex flex-col">
+    <div className="contain-paint relative mt-8 bg-[hsl(235,9%,21%)] text-slate-200 px-4 pt-4 pb-1 light-edge min-h-[calc(100svh-8rem)] outfit-font flex flex-col">
       <div className="absolute -right-[14rem] -bottom-[14rem]">
         <img src={diamondEmboss} className={`w-[38rem] opacity-78`} />
       </div>
@@ -634,7 +634,7 @@ function App() {
                 solution={solution}
               />
 
-              <div className="flex gap-4">
+              <div className="flex gap-4 mb-4">
                 <button
                   disabled={workerThinking}
                   className={unpressedStyle + baseButtonStyle + 'grow'}
@@ -736,7 +736,7 @@ function App() {
         />
       </div>
     </div>
-    </>
+    </div>
   )
 }
 
