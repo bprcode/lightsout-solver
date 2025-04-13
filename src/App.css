@@ -16,6 +16,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+body {
+  background-color: #101015;
+}
+
 .outfit-font {
   font-family: "Outfit", 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-weight: 300;
@@ -231,6 +235,13 @@
     oklch(79.6% 0.17 162.48),
     oklch(56.2% 0.051 172.552)
   );
+}
+
+@utility thin-edge {
+  border-top: 2px solid hsl(225,11%,32%);
+  border-left: 2px solid hsl(225,11%,31%);
+  border-right: 2px solid hsl(245,11%,14%);
+  border-bottom: 2px solid hsl(245,20%,16%);
 }
 
 @utility light-edge {
