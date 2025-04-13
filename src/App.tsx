@@ -218,21 +218,19 @@ function SolutionWrapper({
   }
 
   return (
-    <>
-      {solution && (
-        <>
-          <h3
-            className={`text-slate-300 mb-4 text-xl initial-reveal ${revealDelays[0]}`}
-            key={resetKey}
-          >
-            Solution steps ({solution.length})
-          </h3>
-          <hr className="opacity-50" />
-        </>
-      )}
+    <div className="row-span-2 flex flex-col">
+      <h3
+        className={`text-slate-300 mb-4 text-xl initial-reveal ${revealDelays[0]}`}
+        key={resetKey}
+      >
+        Solution steps ({solution.length})
+      </h3>
+      <hr className="opacity-50" />
       <div
         ref={scrollRef}
-        className={'overflow-y-auto relative h-full snap-y scroll-pt-8'}
+        className={
+          'overflow-y-auto relative h-full snap-y scroll-pt-8 [mask-image:linear-gradient(to_bottom,black_93%,transparent_98%)]'
+        }
       >
         {solution === null && (
           <h2 className="text-orange-300 text-2xl">
@@ -250,10 +248,10 @@ function SolutionWrapper({
         )}
         {/* overlap blocks interaction with solution steps -- intentional: */}
         <div className="w-full top-0 mt-auto h-full sticky">
-          <div className="absolute w-full bottom-0 h-16 bg-linear-to-t from-zinc-800 to-zinc-800/0" />
+          <div className="absolute w-full bottom-0 h-16" />
         </div>
       </div>
-    </>
+    </div>
   )
 }
 function SolutionSteps({
@@ -592,7 +590,7 @@ function App() {
     'px-3 py-1 rounded-lg font-medium h-10 relative flex justify-center items-center shrink-0 '
 
   return (
-    <div className="max-w-4xl mx-auto mt-8 bg-[hsl(235,9%,21%)] text-slate-200 p-4 light-edge min-h-[calc(100svh-8rem)] outfit-font relative contain-paint">
+    <div className="max-w-4xl mx-auto mt-8 bg-[hsl(235,9%,21%)] text-slate-200 px-4 pt-4 pb-1 light-edge min-h-[calc(100svh-8rem)] outfit-font relative contain-paint flex flex-col">
       <div className="absolute -right-[14rem] -bottom-[14rem]">
         <img src={diamondEmboss} className={`w-[38rem] opacity-80`} />
       </div>
@@ -600,7 +598,7 @@ function App() {
         <em>Lights Out</em> solver
       </h1>
 
-      <div className="grid grid-flow-col grid-cols-[max-content_1fr] grid-rows-[min-content_1fr] gap-x-8">
+      <div className="grid grid-flow-col grid-cols-[max-content_1fr] grid-rows-[min-content_1fr] gap-x-8 grow">
         <section className="text-slate-200 prose mb-10 max-w-xl">
           <p>
             <em>Lights Out</em> is a classic puzzle game in which the player
@@ -725,13 +723,12 @@ function App() {
         </main>
 
         {/* Solution section */}
-        <div className="row-span-2">
-          <SolutionWrapper
-            solution={solution}
-            size={boardSize}
-            initialBoard={solvedBoard}
-          />
-        </div>
+
+        <SolutionWrapper
+          solution={solution}
+          size={boardSize}
+          initialBoard={solvedBoard}
+        />
       </div>
     </div>
   )

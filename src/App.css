@@ -29,7 +29,9 @@
 
 @utility d2 {
   outline: 2px solid fuchsia;
-  outline-offset: 4px;
+}
+@utility d3 {
+  outline: 2px solid cyan;
 }
 
 @utility raised-gray {
