@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import diamondEmboss from './assets/diamond-emboss-graphic.svg'
+import backgroundDiamonds from './assets/background-diamonds.svg'
 import './App.css'
 export type BoardSize = 2 | 3 | 4 | 5
 export type BitBoard = number
@@ -587,12 +588,16 @@ function App() {
   const grayUnpressedStyle =
     'raised-gray text-zinc-200 light-edge-faint-shadow hover:bg-zinc-600 active:bg-zinc-800 active:text-zinc-100 active:inset-shadow-sm active:inset-shadow-zinc-950 '
   const baseButtonStyle =
-    'px-3 py-1 rounded-lg font-medium h-10 relative flex justify-center items-center shrink-0 '
+    'px-3 py-1 rounded-lg font-medium h-10 relative flex justify-center items-center shrink-0 cursor-pointer '
 
   return (
+    <>
+      <div className="fixed -top-[14rem] left-1/2 transform translate-x-[-52vw] blur-lg opacity-45">
+        <img src={backgroundDiamonds} className={`w-[50rem] opacity-40`} />
+      </div>
     <div className="max-w-4xl mx-auto mt-8 bg-[hsl(235,9%,21%)] text-slate-200 px-4 pt-4 pb-1 light-edge min-h-[calc(100svh-8rem)] outfit-font relative contain-paint flex flex-col">
       <div className="absolute -right-[14rem] -bottom-[14rem]">
-        <img src={diamondEmboss} className={`w-[38rem] opacity-80`} />
+        <img src={diamondEmboss} className={`w-[38rem] opacity-78`} />
       </div>
       <h1 className="text-slate-300 mb-6 text-3xl font-semibold tracking-[0.01em]">
         <em>Lights Out</em> solver
@@ -731,6 +736,7 @@ function App() {
         />
       </div>
     </div>
+    </>
   )
 }
 
