@@ -648,7 +648,7 @@ function App() {
               </div>
             </div>
 
-            <div className="flex flex-col w-fit items-start">
+            <div className="flex flex-col w-fit items-start z-[1]">
               <div className="flex gap-4">
                 <select
                   className="outline-0 px-4 py-2 light-edge-faint-shadow h-fit mb-4 font-medium raised-gray hover:bg-zinc-600"
