@@ -171,9 +171,26 @@
   }
 }
 
+@keyframes reveal-extend {
+  from {
+    opacity: 0;
+    width: 0%;
+  }
+  to {
+    opacity: 0.5;
+    width: 100%;
+  }
+}
+
 @utility initial-reveal {
   --reveal-delay: 2s;
   animation: 1s var(--reveal-delay) reveal-down ease-out backwards;
+}
+
+@utility reveal-extend {
+  --reveal-delay: 2s;
+  opacity: 0.5;
+  animation: 1.5s var(--reveal-delay) reveal-extend ease-out backwards;
 }
 
 @utility amethyst {

@@ -225,7 +225,7 @@ function SolutionWrapper({
       >
         Solution steps ({solution.length})
       </h3>
-      <hr className="opacity-50" />
+      <hr className={`reveal-extend ${revealDelays[1]}`} />
       <div
         ref={scrollRef}
         className={
