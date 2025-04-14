@@ -46,7 +46,7 @@ export function toggleSingle(
 
 function makeRandomBoard(size: BoardSize) {
   let board = 0
-  for (let i = 0; i < 7; i++) {
+  for (let i = 0; i < 9; i++) {
     const position = Math.floor(Math.random() * size ** 2)
     board = togglePlus(
       board,
