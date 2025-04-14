@@ -223,7 +223,9 @@ function SolutionWrapper({
   }
 
   return (
-    <div className={`${className} row-span-2 flex flex-col`}>
+    <div
+      className={`${className} row-span-2 flex flex-col z-10 mt-[-3rem] wide:mt-0`}
+    >
       <h3
         className={`text-slate-300 mb-4 text-xl initial-reveal ${revealDelays[0]}`}
         key={resetKey}
@@ -234,7 +236,7 @@ function SolutionWrapper({
       <div
         ref={scrollRef}
         className={
-          'overflow-y-auto relative h-full snap-y scroll-pt-8 [mask-image:linear-gradient(to_bottom,black_93%,transparent_98%)]'
+          'wide:overflow-y-auto relative h-full snap-y scroll-pt-8 [mask-image:linear-gradient(to_bottom,black_93%,transparent_98%)]'
         }
       >
         {solution === null && (
@@ -245,7 +247,7 @@ function SolutionWrapper({
 
         {solution && (
           <SolutionSteps
-            className="absolute pt-10 pb-20"
+            className="wide:absolute pt-10 pb-20"
             solution={solution}
             size={size}
             initialBoard={initialBoard}
@@ -288,32 +290,26 @@ function SolutionSteps({
   }, [initialBoard, solution, size])
 
   return (
-    <div className={className}>
-      <div className="flex flex-wrap gap-8">
-        {stepBoards.map((board: BitBoard, i) => {
-          return (
-            <div key={i} className="snap-start">
-              <LightBoard
-                key={i}
-                board={board}
-                size={size}
-                className={`mb-4 initial-reveal ${
-                  revealDelays[
-                    i + 1 < revealDelays.length
-                      ? i + 1
-                      : revealDelays.length - 1
-                  ]
-                }`}
-                tagRow={
-                  board === 0 ? undefined : Math.floor(solution[i] / size)
-                }
-                tagCol={board === 0 ? undefined : solution[i] % size}
-                tag={board === 0 ? 'Done!' : String(i + 1)}
-              />
-            </div>
-          )
-        })}
-      </div>
+    <div className={`${className} flex flex-wrap gap-8`}>
+      {stepBoards.map((board: BitBoard, i) => {
+        return (
+          <div key={i} className="snap-start">
+            <LightBoard
+              key={i}
+              board={board}
+              size={size}
+              className={`mb-4 initial-reveal ${
+                revealDelays[
+                  i + 1 < revealDelays.length ? i + 1 : revealDelays.length - 1
+                ]
+              }`}
+              tagRow={board === 0 ? undefined : Math.floor(solution[i] / size)}
+              tagCol={board === 0 ? undefined : solution[i] % size}
+              tag={board === 0 ? 'Done!' : String(i + 1)}
+            />
+          </div>
+        )
+      })}
     </div>
   )
 }
@@ -547,9 +543,9 @@ function RandomButton({
 
 function App() {
   const [workerThinking, setWorkerThinking] = useState(false)
-  const [solution, setSolution] = useState<number[] | undefined | null>([
-    1, 2, 3, 4,
-  ])
+  const [solution, setSolution] = useState<number[] | undefined | null>(
+    undefined
+  )
   const [solveWorker, setSolveWorker] = useState<Worker | null>(null)
 
   useEffect(() => {
@@ -598,8 +594,8 @@ function App() {
       <div className="fixed top-0 transform -translate-x-1/2 translate-y-[-11rem] blur-md opacity-45">
         <img src={backgroundDiamonds} className={`w-[100%] opacity-40`} />
       </div>
-      <div className="contain-paint relative my-8 bg-[hsl(235,9%,21%)] text-slate-200 px-4 pt-4 pb-1 thin-edge min-h-[calc(100svh-8rem)] outfit-font flex flex-col">
-        <div className="absolute -right-[14rem] -bottom-[14rem]">
+      <div className="contain-paint relative mt-8 wide:mb-16 bg-[hsl(235,9%,21%)] text-slate-200 px-4 narrow:px-6 pt-4 pb-1 thin-edge min-h-[calc(100svh-8rem)] outfit-font flex flex-col">
+        <div className="absolute -right-[14rem] top-[14rem]">
           <img src={diamondEmboss} className={`w-[38rem] opacity-78`} />
         </div>
         <h1
@@ -608,9 +604,8 @@ function App() {
           <em>Lights Out</em> solver
         </h1>
 
-        {/* <div className="grid grid-flow-col grid-cols-[max-content_1fr] grid-rows-[min-content_1fr] gap-x-8 grow"> */}
-        <div className="grid wide-template grow">
-          <section className="[grid-area:text] text-slate-200 prose mb-10 max-w-xl w-[50ch]">
+        <div className="grid narrow-template wide:wide-template grow">
+          <section className="[grid-area:text] text-slate-200 prose mb-2 wide:w-[50ch] max-w-[50ch] z-10">
             <p>
               <em>Lights Out</em> is a classic puzzle game in which the player
               tries to switch off every light on the board. Whenever one light
@@ -623,118 +618,113 @@ function App() {
             </p>
           </section>
 
-          {/* Main lightboard */}
-          <main className="[grid-area:board] flex flex-col items-start shrink-0 ml-8 mr-8 mb-8">
-            <div className="flex gap-8">
-              <div className="flex flex-col justify-between">
-                <LightBoard
-                  className="mb-4"
-                  board={bitBoard}
-                  size={boardSize}
-                  onFlip={(r, c) => {
-                    if (solution === null) {
-                      setSolution(undefined)
-                    }
-                    setBitBoard(inputMode(bitBoard, boardSize, r, c))
+          <div className="[grid-area:board] flex flex-col narrow:flex-row items-center narrow:items-start">
+            <aside className="flex flex-col w-fit items-start z-[1] mb-8 order-1 narrow:order-2">
+              <div className="flex gap-4">
+                <select
+                  className="outline-0 px-4 py-2 light-edge-faint-shadow mb-4 font-medium raised-gray hover:bg-zinc-600 h-10"
+                  value={boardSize}
+                  onChange={e => {
+                    setBoardSize(Number(e.target.value) as BoardSize)
+                    setBitBoard(
+                      makeRandomBoard(Number(e.target.value) as BoardSize)
+                    )
+                    setSolution(undefined)
                   }}
-                  solution={solution}
+                >
+                  <option value="2">2x2</option>
+                  <option value="3">3x3</option>
+                  <option value="4">4x4</option>
+                  <option value="5">5x5</option>
+                </select>
+
+                <RandomButton
+                  className={baseButtonStyle + unpressedSecondary}
+                  onClick={() => {
+                    setSolution(undefined)
+                    setBitBoard(makeRandomBoard(boardSize))
+                  }}
                 />
-
-                <div className="flex gap-4 mb-4">
-                  <button
-                    disabled={workerThinking}
-                    className={solveButtonStyle + baseButtonStyle + 'grow'}
-                    onClick={() => {
-                      setWorkerThinking(true)
-                      setSolution(undefined)
-                      solveWorker?.postMessage({ bitBoard, boardSize })
-                    }}
-                  >
-                    Solve
-                  </button>
-                </div>
               </div>
-            </div>
-          </main>
 
-          <div className="[grid-area:controls] flex flex-col w-fit items-start z-[1]">
-            <div className="flex gap-4">
-              <select
-                className="outline-0 px-4 py-2 light-edge-faint-shadow mb-4 font-medium raised-gray hover:bg-zinc-600 h-10"
-                value={boardSize}
-                onChange={e => {
-                  setBoardSize(Number(e.target.value) as BoardSize)
-                  setBitBoard(
-                    makeRandomBoard(Number(e.target.value) as BoardSize)
-                  )
+              <fieldset className="outline-1 outline-zinc-600 p-4 rounded-md w-full">
+                <div className="flex items-center">
+                  <LinkedButton
+                    className={`${
+                      inputMode === togglePlus
+                        ? grayPressedStyle + ' text-emerald-200/90'
+                        : grayUnpressedStyle + ' '
+                    } ${baseButtonStyle} rounded-br-none rounded-bl-none mr-4 inline`}
+                    onClick={() => {
+                      setInputMode(() => togglePlus)
+                    }}
+                  />
+
+                  <label
+                    htmlFor="linkedSwitch"
+                    className={
+                      inputMode === togglePlus
+                        ? `text-emerald-200`
+                        : `text-slate-200 hover:text-zinc-100 cursor-pointer`
+                    }
+                  >
+                    Toggle linked
+                  </label>
+                </div>
+                <div className="flex items-center">
+                  <SingleButton
+                    className={`${
+                      inputMode === toggleSingle
+                        ? grayPressedStyle + ' text-emerald-200/90'
+                        : grayUnpressedStyle
+                    } ${baseButtonStyle} rounded-tl-none rounded-tr-none mr-4 inline`}
+                    onClick={() => setInputMode(() => toggleSingle)}
+                  />
+
+                  <label
+                    htmlFor="singleSwitch"
+                    className={
+                      inputMode === toggleSingle
+                        ? `text-emerald-200`
+                        : `text-slate-200 hover:text-zinc-100 cursor-pointer`
+                    }
+                  >
+                    Edit puzzle
+                  </label>
+                </div>
+              </fieldset>
+            </aside>
+
+            <main className="flex flex-col items-start mb-14 wide:ml-4 narrow:mr-10 w-fit order-2 narrow:order-1">
+              <LightBoard
+                className="mb-4"
+                board={bitBoard}
+                size={boardSize}
+                onFlip={(r, c) => {
+                  if (solution === null) {
+                    setSolution(undefined)
+                  }
+                  setBitBoard(inputMode(bitBoard, boardSize, r, c))
+                }}
+                solution={solution}
+              />
+
+              <button
+                disabled={workerThinking}
+                className={solveButtonStyle + baseButtonStyle + 'w-full'}
+                onClick={() => {
+                  setWorkerThinking(true)
                   setSolution(undefined)
+                  solveWorker?.postMessage({ bitBoard, boardSize })
                 }}
               >
-                <option value="2">2x2</option>
-                <option value="3">3x3</option>
-                <option value="4">4x4</option>
-                <option value="5">5x5</option>
-              </select>
-
-              <RandomButton
-                className={baseButtonStyle + unpressedSecondary}
-                onClick={() => {
-                  setSolution(undefined)
-                  setBitBoard(makeRandomBoard(boardSize))
-                }}
-              />
-            </div>
-
-            <fieldset className="outline-1 outline-zinc-600 p-4 rounded-md w-full">
-              <div className="flex items-center">
-                <LinkedButton
-                  className={`${
-                    inputMode === togglePlus
-                      ? grayPressedStyle + ' text-emerald-200/90'
-                      : grayUnpressedStyle + ' '
-                  } ${baseButtonStyle} rounded-br-none rounded-bl-none mr-4 inline`}
-                  onClick={() => {
-                    setInputMode(() => togglePlus)
-                  }}
-                />
-
-                <label
-                  htmlFor="linkedSwitch"
-                  className={
-                    inputMode === togglePlus
-                      ? `text-emerald-200`
-                      : `text-slate-200 hover:text-zinc-100 cursor-pointer`
-                  }
-                >
-                  Toggle linked
-                </label>
-              </div>
-              <div className="flex items-center">
-                <SingleButton
-                  className={`${
-                    inputMode === toggleSingle
-                      ? grayPressedStyle + ' text-emerald-200/90'
-                      : grayUnpressedStyle
-                  } ${baseButtonStyle} rounded-tl-none rounded-tr-none mr-4 inline`}
-                  onClick={() => setInputMode(() => toggleSingle)}
-                />
-
-                <label
-                  htmlFor="singleSwitch"
-                  className={
-                    inputMode === toggleSingle
-                      ? `text-emerald-200`
-                      : `text-slate-200 hover:text-zinc-100 cursor-pointer`
-                  }
-                >
-                  Edit puzzle
-                </label>
-              </div>
-            </fieldset>
+                Solve
+              </button>
+            </main>
           </div>
 
           <SolutionWrapper
-            className="[grid-area:solution] ml-20"
+            className="[grid-area:solution] wide:ml-20"
             solution={solution}
             size={boardSize}
             initialBoard={solvedBoard}

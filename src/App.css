@@ -1,6 +1,11 @@
 @import 'tailwindcss';
 @plugin "@tailwindcss/typography";
 
+@theme {
+  --breakpoint-narrow: 500px;
+  --breakpoint-wide: 890px;
+}
+
 :root {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.5;
@@ -28,15 +33,15 @@ body {
 }
 
 @utility d {
-  outline: 1px solid orange;
+  outline: 1px solid rgba(255, 166, 0, 0.154);
 }
 
 @utility d2 {
-  outline: 2px solid fuchsia;
+  outline: 2px solid rgba(255, 0, 255, 0.192);
 }
 
 @utility d3 {
-  outline: 2px solid cyan;
+  outline: 2px solid rgba(0, 255, 255, 0.134);
 }
 
 @utility raised-gray {
@@ -269,11 +274,20 @@ body {
   box-shadow: inset 1px 0 0 #0008, inset 0 1px 0 #000a;
 }
 
+@utility narrow-template {
+  grid-template-areas:
+    'text'
+    'board'
+    'solution';
+
+    row-gap:2rem;
+}
+
 @utility wide-template {
   grid-template-areas:
-    'text text solution'
-    'board controls solution';
+    'text solution'
+    'board solution';
 
-  grid-template-columns: min-content min-content minmax(0, 1fr);
+  grid-template-columns: minmax(0, min-content) minmax(0,1fr);
   grid-template-rows: min-content minmax(0, 1fr);
 }
