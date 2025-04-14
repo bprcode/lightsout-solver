@@ -19,6 +19,8 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  scrollbar-color: var(--color-zinc-500) var(--color-zinc-800);
 }
 
 body {
