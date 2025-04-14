@@ -34,6 +34,15 @@ body {
   font-style: normal;
 }
 
+.noto-sans-display {
+  font-family: "Noto Sans Display", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  font-variation-settings:
+    "wdth" 100;
+}
+
 @utility d {
   outline: 1px solid rgba(255, 166, 0, 0.154);
 }

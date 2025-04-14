@@ -594,14 +594,14 @@ function App() {
       <div className="fixed top-0 transform -translate-x-1/2 translate-y-[-11rem] blur-md opacity-45">
         <img src={backgroundDiamonds} className={`w-[100%] opacity-40`} />
       </div>
-      <div className="contain-paint relative mt-8 wide:mb-8 bg-[hsl(235,9%,21%)] text-slate-200 px-4 narrow:px-6 pt-4 pb-1 y-edge narrow:thin-edge min-h-[calc(100svh-8rem)] outfit-font flex flex-col">
+      <div className="contain-paint relative mt-8 wide:mb-8 bg-[hsl(235,9%,21%)] text-slate-200 px-4 narrow:px-6 pt-6 pb-1 y-edge narrow:thin-edge min-h-[calc(100svh-8rem)] outfit-font flex flex-col">
         <div className="absolute -right-[14rem] top-[14rem]">
           <img src={diamondEmboss} className={`w-[38rem] opacity-78`} />
         </div>
         <h1
-          className={`text-slate-300 mb-6 text-3xl font-semibold tracking-[0.01em]`}
+          className={`text-slate-200 mb-6 text-3xl noto-sans-display tracking-[0.01em]`}
         >
-          <em>Lights Out</em> solver
+          <em>Lights Out</em> Solver
         </h1>
 
         <div className="grid narrow-template wide:wide-template grow">
