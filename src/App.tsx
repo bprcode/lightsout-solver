@@ -590,11 +590,11 @@ function App() {
     'px-3 py-1 rounded-lg font-medium h-10 relative flex justify-center items-center shrink-0 cursor-pointer '
 
   return (
-    <div className="max-w-4xl mx-auto relative">
+    <div className="max-w-xl wide:max-w-4xl mx-auto relative">
       <div className="fixed top-0 transform -translate-x-1/2 translate-y-[-11rem] blur-md opacity-45">
         <img src={backgroundDiamonds} className={`w-[100%] opacity-40`} />
       </div>
-      <div className="contain-paint relative mt-8 wide:mb-8 bg-[hsl(235,9%,21%)] text-slate-200 px-4 narrow:px-6 pt-4 pb-1 y-edge wide:thin-edge min-h-[calc(100svh-8rem)] outfit-font flex flex-col">
+      <div className="contain-paint relative mt-8 wide:mb-8 bg-[hsl(235,9%,21%)] text-slate-200 px-4 narrow:px-6 pt-4 pb-1 y-edge narrow:thin-edge min-h-[calc(100svh-8rem)] outfit-font flex flex-col">
         <div className="absolute -right-[14rem] top-[14rem]">
           <img src={diamondEmboss} className={`w-[38rem] opacity-78`} />
         </div>
@@ -608,12 +608,13 @@ function App() {
           <section className="[grid-area:text] text-slate-200 prose mb-2 max-w-[50ch] wide:w-[50ch] z-10">
             <p>
               <em>Lights Out</em> is a classic puzzle game in which the player
-              tries to switch&nbsp;off every light on the board. Whenever one light
-              is changed, its&nbsp;neighbors change in tandem.
+              tries to switch&nbsp;off every light on the board. Whenever one
+              light is changed, its&nbsp;neighbors change in tandem.
             </p>
             <p>
               This solver will find an optimal solution for any Lights&nbsp;Out
-              puzzle, if&nbsp;it&nbsp;exists. Just set up the board, then&nbsp;click&nbsp;"solve."
+              puzzle, if&nbsp;it&nbsp;exists. Just set up the board,
+              then&nbsp;click&nbsp;"solve."
             </p>
           </section>
 
