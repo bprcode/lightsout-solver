@@ -2,8 +2,8 @@
 @plugin "@tailwindcss/typography";
 
 @theme {
-  --breakpoint-narrow: 500px;
-  --breakpoint-wide: 890px;
+  --breakpoint-narrow: 520px;
+  --breakpoint-wide: 840px;
 }
 
 :root {
@@ -247,6 +247,11 @@ body {
   border-top: 2px solid hsl(225, 11%, 32%);
   border-left: 2px solid hsl(225, 11%, 31%);
   border-right: 2px solid hsl(245, 11%, 14%);
+  border-bottom: 2px solid hsl(245, 20%, 16%);
+}
+
+@utility y-edge {
+  border-top: 2px solid hsl(225, 11%, 32%);
   border-bottom: 2px solid hsl(245, 20%, 16%);
 }
 

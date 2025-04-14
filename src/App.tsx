@@ -247,7 +247,7 @@ function SolutionWrapper({
 
         {solution && (
           <SolutionSteps
-            className="wide:absolute pt-10 pb-20"
+            className="wide:absolute pt-10 pb-20 narrow:ml-4 justify-center narrow:justify-start"
             solution={solution}
             size={size}
             initialBoard={initialBoard}
@@ -508,7 +508,7 @@ function RandomButton({
   className: string
 }) {
   return (
-    <button className={className} onClick={onClick}>
+    <button className={`${className} grow`} onClick={onClick}>
       <svg
         className="text-slate-300 mr-3 group-hover:text-zinc-200"
         width="20"
@@ -594,7 +594,7 @@ function App() {
       <div className="fixed top-0 transform -translate-x-1/2 translate-y-[-11rem] blur-md opacity-45">
         <img src={backgroundDiamonds} className={`w-[100%] opacity-40`} />
       </div>
-      <div className="contain-paint relative mt-8 wide:mb-16 bg-[hsl(235,9%,21%)] text-slate-200 px-4 narrow:px-6 pt-4 pb-1 thin-edge min-h-[calc(100svh-8rem)] outfit-font flex flex-col">
+      <div className="contain-paint relative mt-8 wide:mb-8 bg-[hsl(235,9%,21%)] text-slate-200 px-4 narrow:px-6 pt-4 pb-1 y-edge wide:thin-edge min-h-[calc(100svh-8rem)] outfit-font flex flex-col">
         <div className="absolute -right-[14rem] top-[14rem]">
           <img src={diamondEmboss} className={`w-[38rem] opacity-78`} />
         </div>
@@ -605,7 +605,7 @@ function App() {
         </h1>
 
         <div className="grid narrow-template wide:wide-template grow">
-          <section className="[grid-area:text] text-slate-200 prose mb-2 wide:w-[50ch] max-w-[50ch] z-10">
+          <section className="[grid-area:text] text-slate-200 prose mb-2 max-w-[50ch] z-10">
             <p>
               <em>Lights Out</em> is a classic puzzle game in which the player
               tries to switch off every light on the board. Whenever one light
@@ -619,8 +619,8 @@ function App() {
           </section>
 
           <div className="[grid-area:board] flex flex-col narrow:flex-row items-center narrow:items-start">
-            <aside className="flex flex-col w-fit items-start z-[1] mb-8 order-1 narrow:order-2">
-              <div className="flex gap-4">
+            <aside className="flex flex-col w-[232px] narrow:w-fit items-start z-10 mb-4 order-1 narrow:order-2">
+              <div className="flex gap-4 w-full">
                 <select
                   className="outline-0 px-4 py-2 light-edge-faint-shadow mb-4 font-medium raised-gray hover:bg-zinc-600 h-10"
                   value={boardSize}
@@ -647,7 +647,7 @@ function App() {
                 />
               </div>
 
-              <fieldset className="outline-1 outline-zinc-600 p-4 rounded-md w-full">
+              <fieldset className="outline-1 outline-zinc-600 bg-[hsl(235,9%,21%)] p-4 rounded-md w-full">
                 <div className="flex items-center">
                   <LinkedButton
                     className={`${
@@ -695,7 +695,7 @@ function App() {
               </fieldset>
             </aside>
 
-            <main className="flex flex-col items-start mb-14 wide:ml-4 narrow:mr-10 w-fit order-2 narrow:order-1">
+            <main className="flex flex-col items-start mb-14 narrow:ml-4 narrow:mr-6 w-fit order-2 narrow:order-1">
               <LightBoard
                 className="mb-4"
                 board={bitBoard}
@@ -724,7 +724,7 @@ function App() {
           </div>
 
           <SolutionWrapper
-            className="[grid-area:solution] wide:ml-20"
+            className="[grid-area:solution] wide:ml-16"
             solution={solution}
             size={boardSize}
             initialBoard={solvedBoard}
