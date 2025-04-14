@@ -3,7 +3,7 @@
 
 @theme {
   --breakpoint-narrow: 520px;
-  --breakpoint-wide: 840px;
+  --breakpoint-wide: 880px;
 }
 
 :root {

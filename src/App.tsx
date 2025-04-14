@@ -247,7 +247,7 @@ function SolutionWrapper({
 
         {solution && (
           <SolutionSteps
-            className="wide:absolute pt-10 pb-20 narrow:ml-4 justify-center narrow:justify-start"
+            className="wide:absolute pt-10 pb-20 justify-center narrow:justify-start narrow:ml-4 wide:ml-0"
             solution={solution}
             size={size}
             initialBoard={initialBoard}
@@ -605,16 +605,15 @@ function App() {
         </h1>
 
         <div className="grid narrow-template wide:wide-template grow">
-          <section className="[grid-area:text] text-slate-200 prose mb-2 max-w-[50ch] z-10">
+          <section className="[grid-area:text] text-slate-200 prose mb-2 max-w-[50ch] wide:w-[50ch] z-10">
             <p>
               <em>Lights Out</em> is a classic puzzle game in which the player
-              tries to switch off every light on the board. Whenever one light
-              is changed, its neighbors change in tandem.
+              tries to switch&nbsp;off every light on the board. Whenever one light
+              is changed, its&nbsp;neighbors change in tandem.
             </p>
             <p>
-              This solver will find an optimal solution for any Lights Out
-              puzzle, if it exists (some boards have no solution). Just set up
-              the board, then click "solve."
+              This solver will find an optimal solution for any Lights&nbsp;Out
+              puzzle, if&nbsp;it&nbsp;exists. Just set up the board, then&nbsp;click&nbsp;"solve."
             </p>
           </section>
 
@@ -724,7 +723,7 @@ function App() {
           </div>
 
           <SolutionWrapper
-            className="[grid-area:solution] wide:ml-16"
+            className="[grid-area:solution] wide:ml-14"
             solution={solution}
             size={boardSize}
             initialBoard={solvedBoard}
