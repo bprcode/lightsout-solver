@@ -599,7 +599,7 @@ function App() {
           <img src={diamondEmboss} className={`w-[38rem] opacity-78`} />
         </div>
         <h1
-          className={`text-slate-200 mb-6 text-3xl noto-sans-display tracking-[0.01em]`}
+          className={`text-slate-200 mb-6 text-3xl noto-sans-display`}
         >
           <em>Lights Out</em> Solver
         </h1>
