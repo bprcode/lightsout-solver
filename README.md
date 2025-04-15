@@ -1,4 +1,4 @@
-# Lights Out Solver
+# *Lights Out* Solver
 
 ## A solving utility for the Lights Out puzzle game.
 
@@ -12,4 +12,4 @@ The system is then checked to confirm solvability (i.e. the absence of any unsat
 
 To determine an optimal solution (which clears the board in the fewest possible moves), all possible selections of the free variables are checked.
 
-The user is presented with a solution of moves in top-left to bottom-right order, although any permutation of that solution will also be equivalent.
+The user is presented with a solution consisting of moves in top-left to bottom-right order, although any permutation of that solution will also be equivalent.
