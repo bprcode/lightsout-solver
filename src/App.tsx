@@ -146,7 +146,7 @@ function LightBoard({
       <div
         key={i}
         className="p-1 group"
-        onClick={() => onFlip(Math.floor(i / size), i % size)}
+        onPointerDown={() => onFlip(Math.floor(i / size), i % size)}
       >
         <div
           className={`flex justify-center w-full h-full ${
@@ -598,9 +598,7 @@ function App() {
         <div className="absolute -right-[14rem] top-[14rem]">
           <img src={diamondEmboss} className={`w-[38rem] opacity-78`} />
         </div>
-        <h1
-          className={`text-slate-200 mb-6 text-3xl noto-sans-display`}
-        >
+        <h1 className={`text-slate-200 mb-6 text-3xl noto-sans-display`}>
           <em>Lights Out</em> Solver
         </h1>
 
@@ -704,7 +702,7 @@ function App() {
                   if (solution === null) {
                     setSolution(undefined)
                   }
-                  setBitBoard(inputMode(bitBoard, boardSize, r, c))
+                  setBitBoard(bb => inputMode(bb, boardSize, r, c))
                 }}
                 solution={solution}
               />
